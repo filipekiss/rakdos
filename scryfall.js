@@ -1,5 +1,6 @@
 const queryString = require('query-string');
 const fetch = require('node-fetch');
+const {placeholder} = require('./helpers/string');
 
 class ScryfallApi {
     constructor() {
@@ -20,17 +21,6 @@ class ScryfallApi {
         };
     }
 
-    async named(params = {}) {
-        if (!params) {
-            throw new Error('No Query Passed');
-        }
-        const requestUrl = this.buildRequestUrl(
-            this.scryfallApi.cards.named,
-            params
-        );
-        console.log(requestUrl);
-    }
-
     async search(params = {}) {
         if (!params) {
             throw new Error('No Query Passed');
@@ -43,7 +33,23 @@ class ScryfallApi {
         return results;
     }
 
+    async getCard(id = null) {
+        if (id) {
+            const requestUrl = this.buildRequestUrl(
+                this.scryfallApi.cards.single,
+                {id}
+            );
+            const result = await this.parsedSearchResults(requestUrl);
+            if (result.oracle_text) {
+                return result.oracle_text;
+            }
+        }
+    }
+
     buildRequestUrl(url = '/', params) {
+        if (url.indexOf(':') !== -1) {
+            url = placeholder(url, params);
+        }
         const apiLocation = new URL(url, this.scryfallApi.root);
         const search = queryString.stringify(params);
         apiLocation.search = search;
