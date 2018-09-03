@@ -1,6 +1,5 @@
 const queryString = require('query-string');
 const fetch = require('node-fetch');
-const URL = require('url').Url;
 
 class ScryfallApi {
     constructor() {
