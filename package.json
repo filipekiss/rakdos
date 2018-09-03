@@ -1,0 +1,17 @@
+{
+  "name": "magic-bot",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "node-fetch": "^2.2.0",
+    "query-string": "^6.1.0",
+    "telegraf": "^3.23.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Filipe Kiss <hello@filipekiss.com.br>",
+  "license": "MIT"
+}
