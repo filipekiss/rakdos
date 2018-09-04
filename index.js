@@ -1,6 +1,7 @@
 const Telegraf = require('telegraf');
 const Markup = require('telegraf/markup');
 const ScryfallApi = require('./scryfall');
+const http = require('http');
 
 const rakdosVersion = '0.1.1';
 
@@ -70,6 +71,11 @@ try {
     })
 
     bot.startPolling();
+
+    const server = http.createServer((req, res) => {
+        res.end('<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>')
+    });
+    server.listen(3000, '0.0.0.0');
 } catch (err) {
     // console.error(err);
 }
