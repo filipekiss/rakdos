@@ -77,5 +77,5 @@ try {
     });
     server.listen(3000, '0.0.0.0');
 } catch (err) {
-    // console.error(err);
+    console.error(err);
 }
