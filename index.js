@@ -1,7 +1,7 @@
 const Telegraf = require('telegraf');
 const Markup = require('telegraf/markup');
-const ScryfallApi = require('./scryfall');
 const http = require('http');
+const ScryfallApi = require('./scryfall');
 
 const rakdosVersion = '0.1.1';
 
@@ -13,7 +13,7 @@ try {
 
     const buildPhotoResult = (card) => {
         if (card && card.name && card.image_uris) {
-            console.log(`Building ${card.name}`)
+            console.log(`Building ${card.name}`);
             const cardDetails = {
                 type: 'photo',
                 id: `rakdosbot-${rakdosVersion}--${card.id}`,
@@ -21,26 +21,39 @@ try {
                 thumb_url: card.image_uris.small,
                 title: `${card.name}`,
                 reply_markup: Markup.inlineKeyboard([
-                    Markup.urlButton('View In Scryfall', card.scryfall_uri, !card.scryfall_uri),
-                    Markup.urlButton('View In Gatherer', card.related_uris.gatherer, !card.related_uris.gatherer),
+                    Markup.urlButton(
+                        'View In Scryfall',
+                        card.scryfall_uri,
+                        !card.scryfall_uri
+                    ),
+                    Markup.urlButton(
+                        'View In Gatherer',
+                        card.related_uris.gatherer,
+                        !card.related_uris.gatherer
+                    ),
                 ]),
             };
-            console.log(cardDetails)
-            return cardDetails
+            return cardDetails;
         }
         if (card && card.card_faces) {
-            console.log(`Bulding ${card.name} (Face 0)`)
+            console.log(`Bulding ${card.name} (Face 0)`);
             const cardDetails = {
                 type: 'photo',
                 id: `rakdosbot-${rakdosVersion}--${card.id}`,
                 photo_url: card.card_faces[0].image_uris.large,
                 thumb_url: card.card_faces[0].image_uris.small,
                 reply_markup: Markup.inlineKeyboard([
-                    Markup.urlButton('View In Scryfall', card.scryfall_uri, !card.scryfall_uri),
-                    Markup.callbackButton('View Oracle Text', `oracle:${card.id}`),
+                    Markup.urlButton(
+                        'View In Scryfall',
+                        card.scryfall_uri,
+                        !card.scryfall_uri
+                    ),
+                    Markup.callbackButton(
+                        'View Oracle Text',
+                        `oracle:${card.id}`
+                    ),
                 ]),
-            }
-            console.log(cardDetails);
+            };
             return cardDetails;
         }
     };
@@ -69,17 +82,19 @@ try {
         const action = callbackData[0];
         if (action === 'oracle') {
             const results = await api.getCard(callbackData[1]);
-            ctx.telegram.sendMessage(chatId,results)
+            ctx.telegram.sendMessage(chatId, results);
         }
 
         // Using shortcut
         // ctx.answerCbQuery()
-    })
+    });
 
     bot.startPolling();
 
     const server = http.createServer((req, res) => {
-        res.end('<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>')
+        res.end(
+            '<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>'
+        );
     });
     server.listen(3000, '0.0.0.0');
 } catch (err) {
