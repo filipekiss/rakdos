@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const Telegraf = require('telegraf');
 const Markup = require('telegraf/markup');
 const http = require('http');
@@ -11,6 +12,7 @@ try {
     const bot = new Telegraf(process.env.BOT_TOKEN);
     const api = new ScryfallApi();
 
+    // eslint-disable-next-line consistent-return
     const buildPhotoResult = (card) => {
         if (card && card.name && card.image_uris) {
             console.log(`Building ${card.name}`);
@@ -18,7 +20,7 @@ try {
                 type: 'photo',
                 id: `rakdosbot-${rakdosVersion}--${card.id}`,
                 photo_url: card.image_uris.large,
-                thumb_url: card.image_uris.small,
+                thumb_url: card.image_uris.art_crop,
                 title: `${card.name}`,
                 reply_markup: Markup.inlineKeyboard([
                     Markup.urlButton(
@@ -59,20 +61,16 @@ try {
     };
 
     bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
-        if (inlineQuery.query.length > 3) {
-            const results = await api.search({
-                q: inlineQuery.query,
+        const results = await api.search({
+            q: inlineQuery.query,
+        });
+        if (results.data) {
+            const answers = results.data.map((card) =>
+                buildPhotoResult(card)
+            );
+            answerInlineQuery(answers, {
+                cache_time: 600,
             });
-            if (results.data) {
-                const answers = results.data.map((card) =>
-                    buildPhotoResult(card)
-                );
-                answerInlineQuery(answers, {
-                    cache_time: 600,
-                });
-            }
-        } else {
-            console.log('Inline Query Length must be > 3');
         }
     });
 
@@ -84,9 +82,6 @@ try {
             const results = await api.getCard(callbackData[1]);
             ctx.telegram.sendMessage(chatId, results);
         }
-
-        // Using shortcut
-        // ctx.answerCbQuery()
     });
 
     bot.startPolling();
