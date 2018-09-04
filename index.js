@@ -13,7 +13,8 @@ try {
 
     const buildPhotoResult = (card) => {
         if (card && card.name && card.image_uris) {
-            return {
+            console.log(`Building ${card.name}`)
+            const cardDetails = {
                 type: 'photo',
                 id: `rakdosbot-${rakdosVersion}--${card.id}`,
                 photo_url: card.image_uris.large,
@@ -24,9 +25,12 @@ try {
                     Markup.urlButton('View In Gatherer', card.related_uris.gatherer, !card.related_uris.gatherer),
                 ]),
             };
+            console.log(cardDetails)
+            return cardDetails
         }
         if (card && card.card_faces) {
-            return {
+            console.log(`Bulding ${card.name} (Face 0)`)
+            const cardDetails = {
                 type: 'photo',
                 id: `rakdosbot-${rakdosVersion}--${card.id}`,
                 photo_url: card.card_faces[0].image_uris.large,
@@ -36,6 +40,8 @@ try {
                     Markup.callbackButton('View Oracle Text', `oracle:${card.id}`),
                 ]),
             }
+            console.log(cardDetails);
+            return cardDetails;
         }
     };
 
