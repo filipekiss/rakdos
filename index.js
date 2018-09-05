@@ -4,7 +4,7 @@ const Markup = require('telegraf/markup');
 const http = require('http');
 const ScryfallApi = require('./scryfall');
 
-const rakdosVersion = '0.1.1';
+const rakdosVersion = '0.2.0';
 
 // async/await example.
 
@@ -12,61 +12,87 @@ try {
     const bot = new Telegraf(process.env.BOT_TOKEN);
     const api = new ScryfallApi();
 
-    // eslint-disable-next-line consistent-return
-    const buildPhotoResult = (card) => {
-        if (card && card.name && card.image_uris) {
-            console.log(`Building ${card.name}`);
-            const cardDetails = {
-                type: 'photo',
-                id: `rakdosbot-${rakdosVersion}--${card.id}`,
-                photo_url: card.image_uris.large,
-                thumb_url: card.image_uris.art_crop,
-                title: `${card.name}`,
-                reply_markup: Markup.inlineKeyboard([
-                    Markup.urlButton(
-                        'View In Scryfall',
-                        card.scryfall_uri,
-                        !card.scryfall_uri
-                    ),
-                    Markup.urlButton(
-                        'View In Gatherer',
-                        card.related_uris.gatherer,
-                        !card.related_uris.gatherer
-                    ),
-                ]),
-            };
-            return cardDetails;
+    /* eslint-disable-next-line no-inner-declarations, consistent-return */
+    function buildCardImage(set, id, side = '', size = 'large') {
+        const cardImage = `https://img.scryfall.com/cards/${size}/en/${set}/${id}${side}.jpg`;
+        return cardImage;
+    }
+
+    function buildManaCost(card) {
+        if (card.mana_cost) {
+            return card.mana_cost.replace(/[{}]/g, '');
         }
+        if (card.card_faces && card.card_faces[0].mana_cost) {
+            return card.card_faces[0].mana_cost.replace(/[{}]/g, '');
+        }
+        return '';
+    }
+
+    function buildOracleText(card) {
+        if (card.oracle_text) {
+            return card.oracle_text;
+        }
+        if (card.card_faces && card.card_faces[0].oracle_text) {
+            return card.card_faces[0].oracle_text;
+        }
+        return '';
+    }
+    /* eslint-disable-next-line no-inner-declarations, consistent-return */
+    function buildArticleReturn(card) {
+        let cardSide;
         if (card && card.card_faces) {
-            console.log(`Bulding ${card.name} (Face 0)`);
-            const cardDetails = {
-                type: 'photo',
-                id: `rakdosbot-${rakdosVersion}--${card.id}`,
-                photo_url: card.card_faces[0].image_uris.large,
-                thumb_url: card.card_faces[0].image_uris.small,
-                reply_markup: Markup.inlineKeyboard([
-                    Markup.urlButton(
-                        'View In Scryfall',
-                        card.scryfall_uri,
-                        !card.scryfall_uri
-                    ),
-                    Markup.callbackButton(
-                        'View Oracle Text',
-                        `oracle:${card.id}`
-                    ),
-                ]),
-            };
-            return cardDetails;
+            cardSide = 'a';
         }
-    };
+        const cardImageLarge = buildCardImage(
+            card.set,
+            card.collector_number,
+            cardSide,
+            'large'
+        );
+        const cardImageThumb = buildCardImage(
+            card.set,
+            card.collector_number,
+            cardSide,
+            'art_crop'
+        );
+        const cardDetails = {
+            type: 'article',
+            id: `rakdosbot-${rakdosVersion}--${card.id}`,
+            title: card.name,
+            input_message_content: {
+                message_text: `<strong>${card.name}</strong> (${buildManaCost(
+                    card
+                )}) <a href="${cardImageLarge}">&#8205;</a>`,
+                parse_mode: 'HTML',
+            },
+            thumb_url: cardImageThumb,
+            description: buildOracleText(card),
+            reply_markup: Markup.inlineKeyboard([
+                Markup.urlButton(
+                    'View In Scryfall',
+                    card.scryfall_uri,
+                    !card.scryfall_uri
+                ),
+                Markup.urlButton(
+                    'View In Gatherer',
+                    card.related_uris.gatherer,
+                    !card.related_uris.gatherer
+                ),
+            ]),
+        };
+        return cardDetails;
+    }
 
     bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
+        if (!inlineQuery.query) {
+            return;
+        }
         const results = await api.search({
             q: inlineQuery.query,
         });
         if (results.data) {
             const answers = results.data.map((card) =>
-                buildPhotoResult(card)
+                buildArticleReturn(card)
             );
             answerInlineQuery(answers, {
                 cache_time: 600,

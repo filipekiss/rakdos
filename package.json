@@ -1,6 +1,6 @@
 {
     "name": "rakdos",
-    "version": "0.0.0",
+    "version": "0.2.0",
     "description": "",
     "main": "index.js",
     "dependencies": {
@@ -8,7 +8,9 @@
         "query-string": "^6.1.0",
         "telegraf": "^3.23.0"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "dotenv": "^6.0.0"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node index.js"
