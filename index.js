@@ -1,123 +1,51 @@
-/* eslint-disable no-console */
+const express = require('express');
 const Telegraf = require('telegraf');
-const Markup = require('telegraf/markup');
-const http = require('http');
+const RakdosCard = require('./models/rakdos/card');
 const ScryfallApi = require('./scryfall');
+const CardResult = require('./models/rakdos/card-result');
 
-const rakdosVersion = '0.2.0';
+const api = new ScryfallApi();
+const bot = new Telegraf(process.env.BOT_TOKEN);
+const expressApp = express();
 
-// async/await example.
-
-try {
-    const bot = new Telegraf(process.env.BOT_TOKEN);
-    const api = new ScryfallApi();
-
-    /* eslint-disable-next-line no-inner-declarations, consistent-return */
-    function buildCardImage(set, id, side = '', size = 'large') {
-        const cardImage = `https://img.scryfall.com/cards/${size}/en/${set}/${id}${side}.jpg`;
-        return cardImage;
+bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
+    if (!inlineQuery.query) {
+        return;
     }
-
-    function buildManaCost(card) {
-        if (card.mana_cost) {
-            return card.mana_cost.replace(/[{}]/g, '');
-        }
-        if (card.card_faces && card.card_faces[0].mana_cost) {
-            return card.card_faces[0].mana_cost.replace(/[{}]/g, '');
-        }
-        return '';
-    }
-
-    function buildOracleText(card) {
-        if (card.oracle_text) {
-            return card.oracle_text;
-        }
-        if (card.card_faces && card.card_faces[0].oracle_text) {
-            return card.card_faces[0].oracle_text;
-        }
-        return '';
-    }
-    /* eslint-disable-next-line no-inner-declarations, consistent-return */
-    function buildArticleReturn(card) {
-        let cardSide;
-        if (card && card.card_faces) {
-            cardSide = 'a';
-        }
-        const cardImageLarge = buildCardImage(
-            card.set,
-            card.collector_number,
-            cardSide,
-            'large'
-        );
-        const cardImageThumb = buildCardImage(
-            card.set,
-            card.collector_number,
-            cardSide,
-            'art_crop'
-        );
-        const cardDetails = {
-            type: 'article',
-            id: `rakdosbot-${rakdosVersion}--${card.id}`,
-            title: card.name,
-            input_message_content: {
-                message_text: `<strong>${card.name}</strong> (${buildManaCost(
-                    card
-                )}) <a href="${cardImageLarge}">&#8205;</a>`,
-                parse_mode: 'HTML',
-            },
-            thumb_url: cardImageThumb,
-            description: buildOracleText(card),
-            reply_markup: Markup.inlineKeyboard([
-                Markup.urlButton(
-                    'View In Scryfall',
-                    card.scryfall_uri,
-                    !card.scryfall_uri
-                ),
-                Markup.urlButton(
-                    'View In Gatherer',
-                    card.related_uris.gatherer,
-                    !card.related_uris.gatherer
-                ),
-            ]),
-        };
-        return cardDetails;
-    }
-
-    bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
-        if (!inlineQuery.query) {
-            return;
-        }
-        const results = await api.search({
-            q: inlineQuery.query,
-        });
-        if (results.data) {
-            const answers = results.data.map((card) =>
-                buildArticleReturn(card)
-            );
-            answerInlineQuery(answers, {
-                cache_time: 600,
+    const results = await api.search({
+        q: inlineQuery.query,
+    });
+    let articles = [];
+    if (results.data) {
+        results.data.forEach((card) => {
+            const rakdosCard = new RakdosCard(card);
+            const cardResult = rakdosCard.faces.map((cardFace) => {
+                const faceResult = {};
+                faceResult.type = 'article';
+                faceResult.id = `rakdosbot--${card.set}${
+                    card.collector_number
+                }${cardFace.face}`;
+                faceResult.title = cardFace.name;
+                faceResult.description = cardFace.oracle;
+                faceResult.thumb_url = cardFace.getImage('art_crop');
+                faceResult.input_message_content = CardResult.buildMessageContent(
+                    cardFace
+                );
+                return faceResult;
             });
-        }
-    });
+            articles = [].concat.apply(articles, cardResult);
+        });
+        answerInlineQuery(articles, {
+            cache_time: 1,
+        });
+    }
+});
 
-    bot.on('callback_query', async (ctx) => {
-        const chatId = ctx.update.callback_query.chat_instance;
-        const callbackData = ctx.update.callback_query.data.split(':');
-        const action = callbackData[0];
-        if (action === 'oracle') {
-            const results = await api.getCard(callbackData[1]);
-            ctx.telegram.sendMessage(chatId, results);
-        }
-    });
-
-    bot.startPolling();
-
-    const server = http.createServer((req, res) => {
-        res.end(
-            '<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>'
-        );
-    });
-    server.listen(3000, '0.0.0.0');
-} catch (err) {
-    console.error(err);
-}
+bot.telegram.setWebhook(`${process.env.URL}/${process.env.BOT_TOKEN}`);
+expressApp.use(bot.webhookCallback(`/${process.env.BOT_TOKEN}`));
+expressApp.get('/', (req, res) => {
+    res.send(
+        '<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>'
+    );
+});
+expressApp.listen(3000);

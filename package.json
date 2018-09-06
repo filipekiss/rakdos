@@ -1,9 +1,10 @@
 {
     "name": "rakdos",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "",
     "main": "index.js",
     "dependencies": {
+        "express": "^4.16.3",
         "node-fetch": "^2.2.0",
         "query-string": "^6.1.0",
         "telegraf": "^3.23.0"
