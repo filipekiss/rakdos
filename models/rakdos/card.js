@@ -1,5 +1,8 @@
 class RakdosCard {
     constructor(card) {
+        if (!card.set || !card.collector_number) {
+            throw Error('Invalid Card Format', card);
+        }
         this.set = card.set;
         this.number = card.collector_number;
         this.faces = this.buildFaces(card);

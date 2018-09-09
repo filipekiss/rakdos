@@ -1,6 +1,6 @@
 const queryString = require('query-string');
 const fetch = require('node-fetch');
-const {placeholder} = require('./helpers/string');
+const {placeholder} = require('./string');
 
 class ScryfallApi {
     constructor() {
@@ -27,6 +27,18 @@ class ScryfallApi {
         }
         const requestUrl = this.buildRequestUrl(
             this.scryfallApi.cards.search,
+            params
+        );
+        const results = await this.parsedSearchResults(requestUrl);
+        return results;
+    }
+
+    async named(params = {}) {
+        if (!params) {
+            throw new Error('No Query Passed');
+        }
+        const requestUrl = this.buildRequestUrl(
+            this.scryfallApi.cards.named,
             params
         );
         const results = await this.parsedSearchResults(requestUrl);

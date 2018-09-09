@@ -1,51 +1,35 @@
 const express = require('express');
 const Telegraf = require('telegraf');
-const RakdosCard = require('./models/rakdos/card');
-const ScryfallApi = require('./scryfall');
-const CardResult = require('./models/rakdos/card-result');
+const {inlineQueryHandler} = require('./handlers/inline-query');
+const {messageHandler} = require('./handlers/incoming-message');
 
-const api = new ScryfallApi();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const expressApp = express();
 
+const CACHE_TIME = process.env.CACHE_TIME ? process.env.CACHE_TIME : 600;
+
 bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
-    if (!inlineQuery.query) {
-        return;
-    }
-    const results = await api.search({
-        q: inlineQuery.query,
-    });
-    let articles = [];
-    if (results.data) {
-        results.data.forEach((card) => {
-            const rakdosCard = new RakdosCard(card);
-            const cardResult = rakdosCard.faces.map((cardFace) => {
-                const faceResult = {};
-                faceResult.type = 'article';
-                faceResult.id = `rakdosbot--${card.set}${
-                    card.collector_number
-                }${cardFace.face}`;
-                faceResult.title = cardFace.name;
-                faceResult.description = cardFace.oracle;
-                faceResult.thumb_url = cardFace.getImage('art_crop');
-                faceResult.input_message_content = CardResult.buildMessageContent(
-                    cardFace
-                );
-                return faceResult;
-            });
-            articles = [].concat.apply(articles, cardResult);
-        });
+    inlineQueryHandler(inlineQuery).then((articles) => {
         answerInlineQuery(articles, {
-            cache_time: 1,
+            cache_time: CACHE_TIME,
         });
-    }
+    });
 });
 
-bot.telegram.setWebhook(`${process.env.URL}/${process.env.BOT_TOKEN}`);
-expressApp.use(bot.webhookCallback(`/${process.env.BOT_TOKEN}`));
-expressApp.get('/', (req, res) => {
-    res.send(
-        '<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>'
-    );
-});
-expressApp.listen(3000);
+bot.hears(messageHandler.trigger, messageHandler.handler);
+
+if (process.env.NODE_ENV === 'production') {
+    bot.telegram.setWebhook(`${process.env.URL}/${process.env.BOT_TOKEN}`);
+    expressApp.use(bot.webhookCallback(`/${process.env.BOT_TOKEN}`));
+    expressApp.get('/', (req, res) => {
+        res.send(
+            '<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>'
+        );
+    });
+    expressApp.listen(3000);
+} else {
+    bot.telegram.setWebhook('');
+    bot.startPolling();
+    console.log('Rakdos Polling Telegram Servers…');
+    console.log(`Cache Time: ${CACHE_TIME}`);
+}

@@ -1,13 +1,13 @@
-class CardResult {
+class PhotoResult {
     static buildPhotoMessage(card) {
         const faceResult = {};
         faceResult.type = 'photo';
-        faceResult.id = `rakdosbot--${card.set}${card.number}${card.face}`;
+        faceResult.media = card.getImage('large');
         return faceResult;
     }
 }
 
-module.exports = CardResult;
+module.exports = PhotoResult;
 
 //         type: 'article',
 //         id: `rakdosbot-${rakdosVersion}--${card.id}`,
