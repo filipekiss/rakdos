@@ -9,6 +9,7 @@ const expressApp = express();
 const CACHE_TIME = process.env.CACHE_TIME ? process.env.CACHE_TIME : 600;
 
 bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
+    console.log('Handling Inline');
     inlineQueryHandler(inlineQuery).then((articles) => {
         answerInlineQuery(articles, {
             cache_time: CACHE_TIME,
@@ -19,6 +20,7 @@ bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
 bot.hears(messageHandler.trigger, messageHandler.handler);
 
 if (process.env.NODE_ENV === 'production') {
+    console.log(`Running Rakdos in Production Mode`);
     bot.telegram.setWebhook(`${process.env.URL}/${process.env.BOT_TOKEN}`);
     expressApp.use(bot.webhookCallback(`/${process.env.BOT_TOKEN}`));
     expressApp.get('/', (req, res) => {
