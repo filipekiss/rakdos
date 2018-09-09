@@ -5,6 +5,15 @@ class CardResult {
         faceResult.id = `rakdosbot--${card.set}${card.number}${card.face}`;
         return faceResult;
     }
+
+    static buildMessageContent(card) {
+        return {
+            message_text: `<strong>${card.name}</strong> ${
+                card.mana_cost
+            }<a href="${card.getImage('large')}">&#8205;</a>`,
+            parse_mode: 'HTML',
+        };
+    }
 }
 
 module.exports = CardResult;
