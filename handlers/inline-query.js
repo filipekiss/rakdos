@@ -1,6 +1,6 @@
 const RakdosCard = require('../models/rakdos/card');
 const ScryfallApi = require('../helpers/scryfall');
-const CardResult = require('../models/rakdos/card-result');
+const CardFaceResult = require('../models/rakdos/card-face-result');
 
 const api = new ScryfallApi();
 
@@ -17,26 +17,12 @@ async function inlineQueryHandler(inlineQuery) {
         console.log('Results found');
         results.data.forEach((card) => {
             const rakdosCard = new RakdosCard(card);
-            const cardResult = rakdosCard.faces.map((cardFace) => {
-                const faceResult = {};
-                faceResult.type = 'article';
-                faceResult.id = `rakdosbot--${card.set}${
-                    card.collector_number
-                }${cardFace.face}`;
-                faceResult.title = cardFace.name;
-                faceResult.description = cardFace.oracle;
-                faceResult.thumb_url = cardFace.getImage('art_crop');
-                faceResult.input_message_content = CardResult.buildMessageContent(
-                    cardFace
-                );
-                return faceResult;
-            });
+            const cardResult = rakdosCard.faces.map((cardFace) => new CardFaceResult(card, cardFace));
             articles = [].concat.apply(articles, cardResult);
         });
         return articles;
     }
     console.log('NO Results Found');
-
 }
 
 module.exports = {inlineQueryHandler};
