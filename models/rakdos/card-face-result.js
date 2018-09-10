@@ -1,4 +1,4 @@
-const Markup = require('telegraf/Markup');
+const Markup = require('telegraf/markup');
 
 function buildMessageContent(card) {
     return {
