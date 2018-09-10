@@ -3,7 +3,10 @@ class RakdosCard {
         if (!card.set || !card.collector_number) {
             throw Error('Invalid Card Format', card);
         }
+        this.name = card.name;
+        this.scryfall_id = card.id;
         this.set = card.set;
+        this.scryfall_uri = card.scryfall_uri;
         this.number = card.collector_number;
         this.faces = this.buildFaces(card);
     }
@@ -53,40 +56,3 @@ class RakdosCard {
 }
 
 module.exports = RakdosCard;
-
-// const buildArticleReturn = function(card) {
-//     const cardImagesLarge = buildCardImage(card);
-//     const cardImagesThumb = buildCardImage(card, 'art_crop');
-//     const cardDetails = {
-//         type: 'article',
-//         id: `rakdosbot-${rakdosVersion}--${card.id}`,
-//         title: card.name,
-//         input_message_content: {
-//             message_text: `<strong>${card.name}</strong> (${buildManaCost(
-//                 card
-//             )}) ${cardImagesLarge
-//                 .map(
-//                     (cardImage) =>
-//                         `${cardImage} <a href="${cardImage}">&#8205;</a>`
-//                 )
-//                 .join('')}`,
-//             parse_mode: 'HTML',
-//         },
-//         thumb_url: cardImagesThumb[0],
-//         description: buildOracleText(card),
-//         reply_markup: Markup.inlineKeyboard([
-//             Markup.urlButton(
-//                 'View In Scryfall',
-//                 card.scryfall_uri,
-//                 !card.scryfall_uri
-//             ),
-//             Markup.urlButton(
-//                 'View In Gatherer',
-//                 card.related_uris.gatherer,
-//                 !card.related_uris.gatherer
-//             ),
-//         ]),
-//     };
-//     return cardDetails;
-// }
-// }

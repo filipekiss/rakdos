@@ -52,9 +52,7 @@ class ScryfallApi {
                 {id}
             );
             const result = await this.parsedSearchResults(requestUrl);
-            if (result.oracle_text) {
-                return result.oracle_text;
-            }
+            return result;
         }
     }
 

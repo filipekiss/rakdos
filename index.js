@@ -2,6 +2,7 @@ const express = require('express');
 const Telegraf = require('telegraf');
 const {inlineQueryHandler} = require('./handlers/inline-query');
 const {messageHandler} = require('./handlers/incoming-message');
+const {handleCallbackQuery} = require('./handlers/callback-query');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const expressApp = express();
@@ -14,6 +15,8 @@ bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
         cache_time: CACHE_TIME,
     });
 });
+
+bot.on('callback_query', handleCallbackQuery);
 
 bot.hears(messageHandler.trigger, messageHandler.handler);
 

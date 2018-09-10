@@ -16,7 +16,7 @@ async function inlineQueryHandler(inlineQuery) {
         results.data.forEach((card) => {
             const rakdosCard = new RakdosCard(card);
             const cardResult = rakdosCard.faces.map(
-                (cardFace) => new CardFaceResult(card, cardFace)
+                (cardFace) => new CardFaceResult(rakdosCard, cardFace)
             );
             articles = [].concat.apply(articles, cardResult);
         });
