@@ -10,12 +10,11 @@ const CACHE_TIME = process.env.CACHE_TIME ? process.env.CACHE_TIME : 600;
 
 bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
     console.log('Handling Inline');
-    inlineQueryHandler(inlineQuery).then((articles) => {
-        console.log('Callback Handler');
-        console.log(articles);
-        answerInlineQuery(articles, {
-            cache_time: CACHE_TIME,
-        });
+    const articles = await inlineQueryHandler(inlineQuery);
+    console.log('Callback Handler');
+    console.log(articles);
+    answerInlineQuery(articles, {
+        cache_time: CACHE_TIME,
     });
 });
 
