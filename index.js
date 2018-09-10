@@ -11,6 +11,8 @@ const CACHE_TIME = process.env.CACHE_TIME ? process.env.CACHE_TIME : 600;
 bot.on('inline_query', async ({inlineQuery, answerInlineQuery}) => {
     console.log('Handling Inline');
     inlineQueryHandler(inlineQuery).then((articles) => {
+        console.log('Callback Handler');
+        console.log(articles);
         answerInlineQuery(articles, {
             cache_time: CACHE_TIME,
         });
@@ -21,12 +23,16 @@ bot.hears(messageHandler.trigger, messageHandler.handler);
 
 if (process.env.NODE_ENV === 'production') {
     console.log(`Running Rakdos in Production Mode`);
-    bot.telegram.setWebhook(`${process.env.URL}/${process.env.BOT_TOKEN}`);
-    expressApp.use(bot.webhookCallback(`/${process.env.BOT_TOKEN}`));
+    expressApp.use(bot.webhookCallback(`/bot/${process.env.BOT_TOKEN}`));
     expressApp.get('/', (req, res) => {
         res.send(
             '<h1>Rakdos Bot - See <a href="https://github.com/filipekiss/rakdos">the github repo</a> for issues and suggestions</h1>'
         );
+    });
+    expressApp.get('/set-hook', (req, res) => {
+        const fullUrl = `https://${req.get('host')}`;
+        bot.telegram.setWebhook(`${fullUrl}/bot/${process.env.BOT_TOKEN}`);
+        res.send(`WebHook set to ${fullUrl}/bot/:token`);
     });
     expressApp.listen(3000);
 } else {

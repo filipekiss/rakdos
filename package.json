@@ -19,6 +19,11 @@
     "engines": {
         "node": ">=10.0"
     },
+    "eslint": {
+        "rules": {
+            "no-console": "warn"
+        }
+    },
     "author": "Filipe Kiss <hello@filipekiss.com.br>",
     "license": "MIT"
 }

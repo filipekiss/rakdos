@@ -6,6 +6,7 @@ const api = new ScryfallApi();
 
 async function inlineQueryHandler(inlineQuery) {
     if (!inlineQuery.query) {
+        console.log('No query');
         return;
     }
     const results = await api.search({
@@ -13,6 +14,7 @@ async function inlineQueryHandler(inlineQuery) {
     });
     let articles = [];
     if (results.data) {
+        console.log('Results found');
         results.data.forEach((card) => {
             const rakdosCard = new RakdosCard(card);
             const cardResult = rakdosCard.faces.map((cardFace) => {
@@ -33,6 +35,8 @@ async function inlineQueryHandler(inlineQuery) {
         });
         return articles;
     }
+    console.log('NO Results Found');
+
 }
 
 module.exports = {inlineQueryHandler};
