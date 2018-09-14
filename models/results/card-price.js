@@ -1,10 +1,9 @@
-function buildPriceTags(card) {
-    return `💵 ${card.usd} | 💶 ${card.eur} | 🎟 ${card.tix}`;
-}
+const Price = require('../../helpers/constants/price');
+
 function buildMessageContent(card) {
     return {
         message_text: `<strong>${card.name}</strong><pre>
-${buildPriceTags(card)}</pre>`,
+${Price.buildPriceTags(card)}</pre>`,
         parse_mode: 'HTML',
     };
 }
@@ -17,7 +16,7 @@ class CardPriceResult {
             cardFace.face
         }-price`;
         faceResult.title = cardFace.name;
-        faceResult.description = buildPriceTags(card);
+        faceResult.description = Price.buildPriceTags(card);
         faceResult.thumb_url = cardFace.getImage('art_crop');
         faceResult.input_message_content = buildMessageContent(card);
         return faceResult;

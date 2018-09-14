@@ -33,6 +33,18 @@ const Legality = {
 
         return labels[legality] ? labels[legality] : '';
     },
+    buildLegalityText(card, joiner = ' ') {
+        return Object.entries(card.legality)
+            .filter((legality) => {
+                const [name] = legality;
+                return Boolean(Legality.label(name));
+            })
+            .map((legality) => {
+                const [name, legal] = legality;
+                return `${Legality.label(legal)} ${Legality.label(name)} `;
+            })
+            .join(joiner);
+    },
 };
 
 module.exports = Legality;

@@ -1,16 +1,16 @@
 class CardFacePhoto {
-    constructor(cardFace) {
+    constructor(cardFace, size = 'large') {
         const isCardObject = cardFace.constructor === Object;
         if (isCardObject) {
-            return this.buildPhoto(cardFace);
+            return this.buildPhoto(cardFace, size);
         }
         return this.build404(cardFace);
     }
 
-    buildPhoto(cardFace) {
+    buildPhoto(cardFace, size) {
         return {
             type: 'photo',
-            media: cardFace.getImage('large'),
+            media: cardFace.getImage(size),
             caption: `${cardFace.name}`,
         };
     }

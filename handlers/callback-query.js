@@ -29,7 +29,6 @@ async function handleCallbackQuery(ctx) {
             rakdosCard,
             rakdosCard.faces[cardFace]
         );
-        console.log(newCard);
         ctx.editMessageMedia(
             newCard,
             Extra.HTML().markup(() => newCard.reply_markup)
