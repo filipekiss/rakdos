@@ -19,17 +19,31 @@ class ScryfallApi {
                 single: '/cards/:id',
             },
         };
+        this.sort = {
+            order: 'released',
+            dir: 'auto',
+        };
     }
 
     async search(params = {}) {
         if (!params) {
             throw new Error('No Query Passed');
         }
+        const searchParams = {...params};
+        if (!searchParams.order) {
+            searchParams.order = this.sort.order;
+        }
+        if (!searchParams.dir) {
+            searchParams.dir = this.sort.dir;
+        }
         const requestUrl = this.buildRequestUrl(
             this.scryfallApi.cards.search,
-            params
+            searchParams
         );
         const results = await this.parsedSearchResults(requestUrl);
+        if (results.data && results.data.length > 50) {
+            results.data = results.data.slice(0, 50);
+        }
         return results;
     }
 

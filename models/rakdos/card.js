@@ -9,6 +9,10 @@ class RakdosCard {
         this.scryfall_uri = card.scryfall_uri;
         this.number = card.collector_number;
         this.faces = this.buildFaces(card);
+        this.legality = card.legalities;
+        this.usd = card.usd ? card.usd : null;
+        this.tix = card.tix ? card.tix : null;
+        this.eur = card.eur ? card.eur : null;
     }
 
     buildFaces(card) {
