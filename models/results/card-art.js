@@ -24,16 +24,14 @@ function buildTransformButton(card, currentFace) {
 class CardArtResult {
     constructor(card, cardFace) {
         const faceResult = {};
-        faceResult.type = 'photo';
+        faceResult.type = 'article';
         faceResult.id = `rakdosbot--${card.set}${card.number}${
             cardFace.face
         }-art`;
         faceResult.title = cardFace.name;
         faceResult.description = cardFace.oracle;
         faceResult.thumb_url = cardFace.getImage('art_crop');
-        faceResult.photo_url = cardFace.getImage('art_crop');
-        faceResult.media = cardFace.getImage('art_crop');
-        // faceResult.input_message_content = buildMessageContent(cardFace);
+        faceResult.input_message_content = buildMessageContent(cardFace);
         const tranformButton = buildTransformButton(card, cardFace);
         faceResult.reply_markup = Markup.inlineKeyboard([[tranformButton]]);
         return faceResult;

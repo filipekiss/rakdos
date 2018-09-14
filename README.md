@@ -9,7 +9,7 @@ Rakdos is a Telegram bot to search Scryfall for Magic: The Gathering cards.
 Rakdos can either be added to groups or be used in
 [inline mode](https://telegram.org/blog/inline-bots).
 
-#### Searching for a card
+#### Searching for a card (Inline Mode)
 
 When using Rakdos as an inline bot, in any chat, just type `@RakdosBot` followed
 by your query. Let's say you're looking for "Teferi":
@@ -23,7 +23,7 @@ and the result will be sent to the chat:
 
 ![Teferi sent by Rakdos](https://user-images.githubusercontent.com/48519/45313594-b91dc500-b505-11e8-820d-669edfa7a969.png)
 
-#### Using Rakdos in a group chat
+#### Using Rakdos in a group chat (Trigger mode)
 
 If you want, you can add Rakdos to any group you have to make it easier to talk
 about M:tG. For example, let's say I discussing the latest GP and I wanna talk
@@ -70,6 +70,55 @@ place, without the need to search for the other face:
 Just click/tap the button and the card will be updated. You can see a working
 gif
 [here](https://user-images.githubusercontent.com/48519/45313272-c8504300-b504-11e8-8ad8-dd6f01350aa8.gif)
+
+#### Search modifiers
+
+Rakdos support a couple of search modifiers:
+
+###### `#` - Card Legalities (Standard, Modern and Legacy)
+
+###### `$` - Card Price (USD, EUR and TIX)
+
+These modifiers are supported on both inline mode and trigger mode:
+
+##### Using modifiers in inline mode
+
+Just make your search normally, but prepend the card name with one of the
+symbols above.
+
+###### `$` - Card Price (USD, EUR and TIX)
+
+###### `@RakdosBot $Rishadan Port`
+
+<img width="365" alt="image" src="https://user-images.githubusercontent.com/48519/45570713-0b2e5580-b83a-11e8-943d-233e80ed56aa.png">
+
+###### `#` - Card Legality (Standard, Modern and Legacy)
+
+###### `@RakdosBot #Abrupt Decay`
+
+<img width="336" alt="image" src="https://user-images.githubusercontent.com/48519/45570723-171a1780-b83a-11e8-92a3-de6ccc81251e.png">
+
+##### Using modifiers in trigger mode
+
+Just like inline mode, just prepend you card name using one of the symbols (`#`
+or `$`).
+
+###### `$` - Card Price (USD, EUR and TIX)
+
+###### `[[$Rishadan Port]]`
+
+<img width="333" alt="image" src="https://user-images.githubusercontent.com/48519/45571201-e3d88800-b83b-11e8-930b-d9cbf6de034f.png">
+
+###### `#` - Card Legality (Standard, Modern and Legacy)
+
+###### `[[#Abrupt Decay]]`
+
+<img width="302" alt="image" src="https://user-images.githubusercontent.com/48519/45571217-ec30c300-b83b-11e8-92d8-31d04d33597f.png">
+
+You can even combine multiple modifiers in the same message (the bot will
+responde in separate messages, though):
+
+<img width="642" alt="image" src="https://user-images.githubusercontent.com/48519/45571444-94df2280-b83c-11e8-9668-ddaeeacace85.png">
 
 ### Problems with cards and other suggestions
 
