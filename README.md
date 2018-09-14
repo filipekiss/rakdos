@@ -1,6 +1,6 @@
 # Rakdos
 
-![Latest Tag](https://img.shields.io/github/tag/filipekiss/rakdos.svg)
+![Latest Release](https://img.shields.io/github/release/filipekiss/rakdos.svg)
 
 Rakdos is a Telegram bot to search Scryfall for Magic: The Gathering cards.
 
