@@ -26,7 +26,7 @@ const runRegex = function(str, regex) {
 };
 
 const findCardsInString = function(str) {
-    const regex = /\[\[[^!#$]((?:(?!\]\]).)+)\]\]/gm;
+    const regex = /\[\[([^!\#$](?:(?!\]\]).)+)\]\]/gm;
     return runRegex(str, regex);
 };
 
