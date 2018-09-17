@@ -10,9 +10,9 @@ class RakdosCard {
         this.number = card.collector_number;
         this.faces = this.buildFaces(card);
         this.legality = card.legalities;
-        this.usd = card.usd ? card.usd : null;
-        this.tix = card.tix ? card.tix : null;
-        this.eur = card.eur ? card.eur : null;
+        this.usd = card.usd ? card.usd : 'N/A';
+        this.tix = card.tix ? card.tix : 'N/A';
+        this.eur = card.eur ? card.eur : 'N/A';
     }
 
     buildFaces(card) {
