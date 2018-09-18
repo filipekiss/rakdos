@@ -18,11 +18,21 @@ class ScryfallApi {
                 arena: '/cards/arena/:id',
                 single: '/cards/:id',
             },
+            sets: {
+                root: '/sets',
+                single: '/sets/:code',
+            },
         };
         this.sort = {
             order: 'released',
             dir: 'auto',
         };
+    }
+
+    async sets() {
+        const requestUrl = this.buildRequestUrl(this.scryfallApi.sets.root);
+        const sets = await this.parsedSearchResults(requestUrl);
+        return sets;
     }
 
     async search(params = {}) {
