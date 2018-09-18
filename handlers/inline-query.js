@@ -9,8 +9,12 @@ const RakdosQuery = require('../helpers/rakdos-query');
 const api = new ScryfallApi();
 
 async function search(rakdosQuery) {
+    let scryfallQuery = rakdosQuery.text;
+    if (rakdosQuery.set) {
+        scryfallQuery = `${scryfallQuery} e:${rakdosQuery.set}`;
+    }
     const results = await api.search({
-        q: rakdosQuery.text,
+        q: scryfallQuery,
     });
     let articles = [];
     if (results.data) {
