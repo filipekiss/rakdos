@@ -49,6 +49,7 @@ async function buildMediaGroup(cards, imageSize) {
         try {
             const scryfallCard = await api.named({
                 fuzzy: rakdosQuery.text,
+                set: rakdosQuery.set || null,
             });
             const rakdosCard = new RakdosCard(scryfallCard);
             return rakdosCard.faces.map(
