@@ -1,4 +1,8 @@
 class RakdosCard {
+    static get TOKEN() {
+        return 'token';
+    }
+
     constructor(card) {
         if (!card.set || !card.collector_number) {
             throw Error('Invalid Card Format', card);
@@ -13,6 +17,7 @@ class RakdosCard {
         this.usd = card.usd ? card.usd : 'N/A';
         this.tix = card.tix ? card.tix : 'N/A';
         this.eur = card.eur ? card.eur : 'N/A';
+        this.type = card.layout;
     }
 
     buildFaces(card) {
@@ -36,6 +41,7 @@ class RakdosCard {
             name: cardFace.name,
             face: cardFaceId,
             getImage: this.getImage.bind(this, cardFaceId),
+            images: cardFace.image_uris,
         };
     }
 
@@ -52,6 +58,9 @@ class RakdosCard {
     }
 
     getImage(face = '', size = 'large') {
+        if (this.type === this.TOKEN && this.faces[0].images[size]) {
+            return this.images[size];
+        }
         const cardImageUrl = `https://img.scryfall.com/cards/${size}/en/${
             this.set
         }/${this.number}${face}.jpg`;
