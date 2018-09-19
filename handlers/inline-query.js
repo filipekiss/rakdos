@@ -15,6 +15,7 @@ async function search(rakdosQuery) {
     }
     const results = await api.search({
         q: scryfallQuery,
+        include_extras: true,
     });
     let articles = [];
     if (results.data) {
