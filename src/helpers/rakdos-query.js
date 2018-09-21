@@ -1,4 +1,5 @@
-const sets = require('./sets.json');
+const sets = require('static/sets.json');
+const api = require('helpers/scryfall');
 
 class RakdosQuery {
     static get TOKEN() {

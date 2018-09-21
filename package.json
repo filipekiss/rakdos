@@ -10,18 +10,58 @@
         "telegraf": "^3.23.0"
     },
     "devDependencies": {
-        "dotenv": "^6.0.0"
+        "@babel/cli": "7.1.0",
+        "@babel/core": "7.1.0",
+        "@babel/node": "7.0.0",
+        "@babel/plugin-proposal-object-rest-spread": "7.0.0",
+        "@babel/preset-env": "7.1.0",
+        "@babel/register": "7.0.0",
+        "babel-eslint": "9.0.0",
+        "babel-plugin-module-resolver": "3.1.1",
+        "babel-plugin-syntax-trailing-function-commas": "6.22.0",
+        "dotenv": "^6.0.0",
+        "eslint": "5.6.0",
+        "eslint-config-prettier": "3.0.1",
+        "eslint-import-resolver-babel-module": "4.0.0",
+        "eslint-plugin-import": "2.14.0",
+        "nodemon": "1.18.4",
+        "prettier": "1.14.3"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node index.js"
+        "build": "babel src -d ./build",
+        "dev": "nodemon src/index.js dotenv_config_path=.env.dev --exec \"node --require dotenv/config --require @babel/register\"",
+        "start": "node build/index.js"
+    },
+    "babel": {
+        "plugins": [
+            [
+                "@babel/plugin-proposal-object-rest-spread"
+            ],
+            [
+                "module-resolver",
+                {
+                    "root": [
+                        "./src"
+                    ],
+                    "alias": {
+                        "static": "./static"
+                    }
+                }
+            ]
+        ]
     },
     "engines": {
         "node": ">=10.0"
     },
     "eslint": {
-        "rules": {
-            "no-console": "warn"
+        "extends": [
+            "prettier"
+        ],
+        "settings": {
+            "import/resolver": {
+                "babel-module": {}
+            }
         }
     },
     "author": "Filipe Kiss <hello@filipekiss.com.br>",
