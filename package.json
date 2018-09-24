@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
+        "dotenv": "^6.0.0",
         "express": "^4.16.3",
         "node-fetch": "^2.2.0",
         "query-string": "^6.1.0",
@@ -13,34 +14,54 @@
         "@babel/cli": "7.1.0",
         "@babel/core": "7.1.0",
         "@babel/node": "7.0.0",
+        "@babel/plugin-proposal-class-properties": "7.1.0",
         "@babel/plugin-proposal-object-rest-spread": "7.0.0",
         "@babel/preset-env": "7.1.0",
+        "@babel/preset-typescript": "7.1.0",
         "@babel/register": "7.0.0",
+        "@types/express": "4.16.0",
         "babel-eslint": "9.0.0",
         "babel-plugin-module-resolver": "3.1.1",
         "babel-plugin-syntax-trailing-function-commas": "6.22.0",
-        "dotenv": "^6.0.0",
         "eslint": "5.6.0",
         "eslint-config-prettier": "3.0.1",
         "eslint-import-resolver-babel-module": "4.0.0",
         "eslint-plugin-import": "2.14.0",
         "nodemon": "1.18.4",
-        "prettier": "1.14.3"
+        "prettier": "1.14.3",
+        "ts-node": "7.0.1",
+        "typescript": "3.0.3"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "babel src -d ./build",
-        "dev": "nodemon src/index.js dotenv_config_path=.env.dev --exec \"node --require dotenv/config --require @babel/register\"",
-        "start": "node build/index.js"
+        "check-types": "tsc",
+        "check-types:watch": "tsc --watch",
+        "build": "babel src --out-dir ./build --extensions '.ts'",
+        "dev": "nodemon src/index.ts --exec \"babel-node --extensions '.ts' --require  ./node_modules/dotenv/config\"",
+        "start": "node --require dotenv/config build/index.js"
     },
     "babel": {
-        "plugins": [
+        "presets": [
             [
-                "@babel/plugin-proposal-object-rest-spread"
+                "@babel/env",
+                {
+                    "targets": {
+                        "node": "8"
+                    }
+                }
             ],
+            "@babel/typescript"
+        ],
+        "plugins": [
             [
                 "module-resolver",
                 {
+                    "extensions": [
+                        ".ts"
+                    ],
+                    "stripExtensions": [
+                        ".ts"
+                    ],
                     "root": [
                         "./src"
                     ],
@@ -48,6 +69,12 @@
                         "static": "./static"
                     }
                 }
+            ],
+            [
+                "@babel/proposal-object-rest-spread"
+            ],
+            [
+                "@babel/proposal-class-properties"
             ]
         ]
     },
