@@ -1,4 +1,5 @@
-import {Card} from 'interfaces/Card';
+import {Card} from 'interfaces';
+
 const Legality = {
     STANDARD: 'standard',
     FUTURE: 'future',

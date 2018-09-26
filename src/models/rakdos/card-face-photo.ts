@@ -1,10 +1,9 @@
-import {ScryfallCard} from 'interfaces/Scryfall';
-import {CardFace} from 'interfaces/Card';
+import {CardFace, ScryfallCard} from 'interfaces';
 
 class CardFacePhoto {
-    type?: string;
-    media?: string;
-    caption?: string;
+    type: string = 'photo';
+    media: string = '';
+    caption: string = '';
 
     constructor(cardFace: CardFace | any, size = 'large') {
         const isCardObject = cardFace.constructor === Object;
@@ -17,13 +16,11 @@ class CardFacePhoto {
     }
 
     buildPhoto(cardFace: CardFace, size: string): void {
-        this.type = 'photo';
         this.media = cardFace.getImage(size);
         this.caption = `${cardFace.name}`;
     }
 
     build404(card: ScryfallCard): void {
-        this.type = 'photo';
         this.media =
             'https=//mtgcardsmith.com/view/cards_ip/1536462447335512.png?t=891604';
         this.caption = `Rakdos couldn't find anytning about ${card}`;

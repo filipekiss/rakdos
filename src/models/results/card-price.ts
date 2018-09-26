@@ -1,5 +1,4 @@
-import {Card, CardFace} from 'interfaces/Card';
-import {ArticleResult} from 'interfaces/Results';
+import {Card, CardFace, ArticleResult} from 'interfaces';
 import Price from 'helpers/constants/price';
 
 function buildMessageContent(card: Card) {
@@ -25,4 +24,4 @@ class CardPriceResult {
     }
 }
 
-export default CardPriceResult
+export default CardPriceResult;

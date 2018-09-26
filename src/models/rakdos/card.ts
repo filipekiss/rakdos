@@ -1,5 +1,4 @@
-import {ScryfallCard, ScryfallCardFace} from 'interfaces/Scryfall';
-import {CardFace} from 'interfaces/Card';
+import {ScryfallCard, ScryfallCardFace, CardFace} from 'interfaces';
 
 class Card {
     name: string;

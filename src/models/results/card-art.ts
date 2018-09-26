@@ -1,6 +1,5 @@
 import {Markup} from 'telegraf';
-import {Card, CardFace} from 'interfaces/Card';
-import {ArticleResult} from 'interfaces/Results';
+import {Card, CardFace, ArticleResult} from 'interfaces';
 
 function buildMessageContent(card: CardFace) {
     return {

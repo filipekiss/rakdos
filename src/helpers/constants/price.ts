@@ -1,4 +1,4 @@
-import Card from 'interfaces/Card/Card';
+import {Card} from 'interfaces';
 
 const Price = {
     buildPriceTags(card: Card) {

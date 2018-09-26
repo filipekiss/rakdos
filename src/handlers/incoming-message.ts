@@ -4,7 +4,7 @@ import RakdosQuery from '../helpers/rakdos-query';
 import CardFacePhoto from '../models/rakdos/card-face-photo';
 import Legality from '../helpers/constants/legality';
 import Price from '../helpers/constants/price';
-import {CardFace} from 'interfaces/Card';
+import {CardFace} from 'interfaces';
 
 const api = new ScryfallApi();
 

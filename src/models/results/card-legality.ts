@@ -1,5 +1,4 @@
-import {Card, CardFace} from 'interfaces/Card';
-import {ArticleResult} from 'interfaces/Results';
+import {Card, CardFace, ArticleResult} from 'interfaces';
 import Legality from 'helpers/constants/legality';
 
 function buildMessageContent(card: Card) {
