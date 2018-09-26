@@ -44,7 +44,8 @@
         "check-types:watch": "tsc --watch",
         "build": "babel src --out-dir ./build --extensions '.ts'",
         "dev": "nodemon src/index.ts --exec \"babel-node --extensions '.ts' --require  ./node_modules/dotenv/config\"",
-        "start": "node --require dotenv/config build/index.js"
+        "start": "node --require dotenv/config build/index.js",
+        "deploy": "tsc && now --dotenv=.env.production"
     },
     "husky": {
         "hooks": {
