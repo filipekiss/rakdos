@@ -29,8 +29,11 @@
         "eslint-config-prettier": "3.0.1",
         "eslint-import-resolver-babel-module": "4.0.0",
         "eslint-plugin-import": "2.14.0",
+        "husky": "1.0.0",
+        "lint-staged": "7.3.0",
         "nodemon": "1.18.4",
         "prettier": "1.14.3",
+        "pretty-quick": "1.7.0",
         "telegram-typings": "4.0.0-beta",
         "ts-node": "7.0.1",
         "typescript": "3.0.3"
@@ -42,6 +45,20 @@
         "build": "babel src --out-dir ./build --extensions '.ts'",
         "dev": "nodemon src/index.ts --exec \"babel-node --extensions '.ts' --require  ./node_modules/dotenv/config\"",
         "start": "node --require dotenv/config build/index.js"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.ts": [
+            "tsc",
+            "pretty-quick --staged"
+        ],
+        "*.{json,md}": [
+            "pretty-quick --staged"
+        ]
     },
     "babel": {
         "presets": [
@@ -93,6 +110,17 @@
                 "babel-module": {}
             }
         }
+    },
+    "prettier": {
+        "useTabs": false,
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "bracketSpacing": false,
+        "jsxBracketSameLine": false,
+        "arrowParens": "always",
+        "proseWrap": "always"
     },
     "author": "Filipe Kiss <hello@filipekiss.com.br>",
     "license": "MIT"
