@@ -1,28 +1,33 @@
+import {ScryfallCard} from 'interfaces/Scryfall';
+import {CardFace} from 'interfaces/Card';
+
 class CardFacePhoto {
-    constructor(cardFace, size = 'large') {
+    type?: string;
+    media?: string;
+    caption?: string;
+
+    constructor(cardFace: CardFace | any, size = 'large') {
         const isCardObject = cardFace.constructor === Object;
         if (isCardObject) {
-            return this.buildPhoto(cardFace, size);
+            this.buildPhoto(cardFace, size);
+            return this;
         }
-        return this.build404(cardFace);
+        this.build404(cardFace);
+        return this;
     }
 
-    buildPhoto(cardFace, size) {
-        return {
-            type: 'photo',
-            media: cardFace.getImage(size),
-            caption: `${cardFace.name}`,
-        };
+    buildPhoto(cardFace: CardFace, size: string): void {
+        this.type = 'photo';
+        this.media = cardFace.getImage(size);
+        this.caption = `${cardFace.name}`;
     }
 
-    build404(card) {
-        return {
-            type: 'photo',
-            media:
-                'https://mtgcardsmith.com/view/cards_ip/1536462447335512.png?t=891604',
-            caption: `Rakdos couldn't find anytning about ${card}`,
-        };
+    build404(card: ScryfallCard): void {
+        this.type = 'photo';
+        this.media =
+            'https=//mtgcardsmith.com/view/cards_ip/1536462447335512.png?t=891604';
+        this.caption = `Rakdos couldn't find anytning about ${card}`;
     }
 }
 
-module.exports = CardFacePhoto;
+export default CardFacePhoto;

@@ -1,6 +1,8 @@
-const Price = require('../../helpers/constants/price');
+import {Card, CardFace} from 'interfaces/Card';
+import {ArticleResult} from 'interfaces/Results';
+import Price from 'helpers/constants/price';
 
-function buildMessageContent(card) {
+function buildMessageContent(card: Card) {
     return {
         message_text: `<strong>${card.name}</strong><pre>
 ${Price.buildPriceTags(card)}</pre>`,
@@ -9,8 +11,8 @@ ${Price.buildPriceTags(card)}</pre>`,
 }
 
 class CardPriceResult {
-    constructor(card, cardFace) {
-        const faceResult = {};
+    constructor(card: Card, cardFace: CardFace) {
+        const faceResult: ArticleResult = {};
         faceResult.type = 'article';
         faceResult.id = `rakdosbot--${card.set}${card.number}${
             cardFace.face
@@ -23,4 +25,4 @@ class CardPriceResult {
     }
 }
 
-module.exports = CardPriceResult;
+export default CardPriceResult

@@ -5,13 +5,20 @@
         "allowJs": true,
         "noEmit": true,
         "strict": true,
-        "isolatedModules": true,
         "esModuleInterop": true,
         "baseUrl": ".",
         "paths": {
             "*": ["*", "src/*"],
             "static": ["static/*"]
-        }
+        },
+        "lib": ["es2017", "dom"],
+        "typeRoots": [
+            "./typings",
+            "./node_modules/@types",
+            "./node_modules/telegram-typings",
+            "./node_modules/telegraf/typings"
+        ]
     },
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": ["node_modules"]
 }

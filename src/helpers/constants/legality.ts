@@ -1,3 +1,4 @@
+import {Card} from 'interfaces/Card';
 const Legality = {
     STANDARD: 'standard',
     FUTURE: 'future',
@@ -13,7 +14,8 @@ const Legality = {
     BRAWL: 'brawl',
     LEGAL: 'legal',
     NOT_LEGAL: 'not_legal',
-    label: (legality) => {
+    BANNED: 'banned',
+    label: (legality: string): string => {
         const labels = {
             [Legality.STANDARD]: 'Standard',
             // [Legality.FUTURE]: 'Future',
@@ -28,18 +30,21 @@ const Legality = {
             // [Legality.DUEL]: 'Duel Commander',
             // [Legality.BRAWL]: 'Brawl',
             [Legality.LEGAL]: '✅',
-            [Legality.NOT_LEGAL]: '❌',
+            [Legality.NOT_LEGAL]: '⭕️',
+            [Legality.BANNED]: '❌',
         };
 
         return labels[legality] ? labels[legality] : '';
     },
-    buildLegalityText(card, joiner = ' ') {
-        return Object.entries(card.legality)
-            .filter((legality) => {
-                const [name] = legality;
-                return Boolean(Legality.label(name));
-            })
-            .map((legality) => {
+    buildLegalityText(card: Card, joiner = ' ') {
+        return Object.entries(card.legality as object)
+            .filter(
+                (legality: [string, string]): boolean => {
+                    const [name] = legality;
+                    return Boolean(Legality.label(name));
+                }
+            )
+            .map((legality: string[]) => {
                 const [name, legal] = legality;
                 return `${Legality.label(legal)} ${Legality.label(name)} `;
             })
@@ -47,4 +52,4 @@ const Legality = {
     },
 };
 
-module.exports = Legality;
+export default Legality;

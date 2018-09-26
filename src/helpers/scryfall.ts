@@ -1,33 +1,42 @@
-const queryString = require('query-string');
-const fetch = require('node-fetch');
-const {placeholder} = require('./string');
+import queryString from 'query-string';
+import nfetch from 'node-fetch';
+import {Place, placeholder} from './string';
+
+type Url = {
+    href: string;
+};
+
+type SearchParams = {
+    order: string | void;
+    dir: string | void;
+};
 
 class ScryfallApi {
-    constructor() {
-        this.scryfallApi = {
-            root: 'https://api.scryfall.com',
-            cards: {
-                root: '/cards',
-                search: '/cards/search',
-                named: '/cards/named',
-                autocomplete: '/cards/autocomplete',
-                random: '/cards/random',
-                collection: '/cards/collection',
-                multiverse: '/cards/multiverse/:id',
-                mtgo: '/cards/mtgo/:id',
-                arena: '/cards/arena/:id',
-                single: '/cards/:id',
-            },
-            sets: {
-                root: '/sets',
-                single: '/sets/:code',
-            },
-        };
-        this.sort = {
-            order: 'released',
-            dir: 'auto',
-        };
-    }
+    scryfallApi = {
+        root: 'https://api.scryfall.com',
+        cards: {
+            root: '/cards',
+            search: '/cards/search',
+            named: '/cards/named',
+            autocomplete: '/cards/autocomplete',
+            random: '/cards/random',
+            collection: '/cards/collection',
+            multiverse: '/cards/multiverse/:id',
+            mtgo: '/cards/mtgo/:id',
+            arena: '/cards/arena/:id',
+            single: '/cards/:id',
+        },
+        sets: {
+            root: '/sets',
+            single: '/sets/:code',
+        },
+    };
+    sort = {
+        order: 'released',
+        dir: 'auto',
+    };
+
+    constructor() {}
 
     async sets() {
         const requestUrl = this.buildRequestUrl(this.scryfallApi.sets.root);
@@ -39,7 +48,7 @@ class ScryfallApi {
         if (!params) {
             throw new Error('No Query Passed');
         }
-        const searchParams = {...params};
+        const searchParams: SearchParams = {...params} as SearchParams;
         if (!searchParams.order) {
             searchParams.order = this.sort.order;
         }
@@ -69,7 +78,7 @@ class ScryfallApi {
         return results;
     }
 
-    async getCard(id = null) {
+    async getCard(id: string | null = null) {
         if (id) {
             const requestUrl = this.buildRequestUrl(
                 this.scryfallApi.cards.single,
@@ -80,9 +89,9 @@ class ScryfallApi {
         }
     }
 
-    buildRequestUrl(url = '/', params) {
+    buildRequestUrl(url = '/', params: object = {}) {
         if (url.indexOf(':') !== -1) {
-            url = placeholder(url, params);
+            url = placeholder(url, params as Place);
         }
         const apiLocation = new URL(url, this.scryfallApi.root);
         const search = queryString.stringify(params);
@@ -90,11 +99,11 @@ class ScryfallApi {
         return apiLocation;
     }
 
-    async parsedSearchResults(searchUrl = null) {
-        const response = await fetch(searchUrl.href);
+    async parsedSearchResults(searchUrl: Url) {
+        const response = await nfetch(searchUrl.href);
         const body = await response.json();
         return body;
     }
 }
 
-module.exports = ScryfallApi;
+export default ScryfallApi;

@@ -1,6 +1,8 @@
-const Legality = require('../../helpers/constants/legality');
+import {Card, CardFace} from 'interfaces/Card';
+import {ArticleResult} from 'interfaces/Results';
+import Legality from 'helpers/constants/legality';
 
-function buildMessageContent(card) {
+function buildMessageContent(card: Card) {
     return {
         message_text: `<strong>${card.name}</strong>
 ${Legality.buildLegalityText(card, '\n')}`,
@@ -9,8 +11,8 @@ ${Legality.buildLegalityText(card, '\n')}`,
 }
 
 class CardLegalityResult {
-    constructor(card, cardFace) {
-        const faceResult = {};
+    constructor(card: Card, cardFace: CardFace) {
+        const faceResult: ArticleResult = {};
         faceResult.type = 'article';
         faceResult.id = `rakdosbot--${card.set}${card.number}${
             cardFace.face
@@ -23,4 +25,4 @@ class CardLegalityResult {
     }
 }
 
-module.exports = CardLegalityResult;
+export default CardLegalityResult;

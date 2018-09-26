@@ -1,14 +1,17 @@
-const RakdosCard = require('../models/rakdos/card');
-const ScryfallApi = require('../helpers/scryfall');
-const CardFaceResult = require('../models/results/card-face');
-const CardPriceResult = require('../models/results/card-price');
-const CardLegalityResult = require('../models/results/card-legality');
-const CardArtResult = require('../models/results/card-art');
-const RakdosQuery = require('../helpers/rakdos-query');
+import RakdosCard from '../models/rakdos/card';
+import ScryfallApi from '../helpers/scryfall';
+import CardFaceResult from '../models/results/card-face';
+import CardPriceResult from '../models/results/card-price';
+import CardLegalityResult from '../models/results/card-legality';
+import CardArtResult from '../models/results/card-art';
+import RakdosQuery from '../helpers/rakdos-query';
+import ScryfallCard from 'interfaces/Scryfall/ScryfallCard';
+import {InlineQuery} from 'telegram-typings';
+import {ArticleResult} from 'interfaces/Results';
 
 const api = new ScryfallApi();
 
-async function search(rakdosQuery) {
+async function search(rakdosQuery: RakdosQuery) {
     let scryfallQuery = rakdosQuery.text;
     if (rakdosQuery.set) {
         scryfallQuery = `${scryfallQuery} e:${rakdosQuery.set}`;
@@ -17,9 +20,9 @@ async function search(rakdosQuery) {
         q: scryfallQuery,
         include_extras: true,
     });
-    let articles = [];
+    let articles = [] as ArticleResult[];
     if (results.data) {
-        results.data.forEach((card) => {
+        results.data.forEach((card: ScryfallCard) => {
             const rakdosCard = new RakdosCard(card);
             const cardResult = rakdosCard.faces.map((cardFace) => {
                 if (rakdosQuery.isPrice) {
@@ -39,7 +42,7 @@ async function search(rakdosQuery) {
     return articles;
 }
 
-async function inlineQueryHandler(inlineQuery) {
+async function inlineQueryHandler(inlineQuery: InlineQuery) {
     if (!inlineQuery.query) {
         return null;
     }
@@ -48,4 +51,4 @@ async function inlineQueryHandler(inlineQuery) {
     return results;
 }
 
-module.exports = {inlineQueryHandler};
+export {inlineQueryHandler};

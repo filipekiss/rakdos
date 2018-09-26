@@ -1,4 +1,8 @@
-function placeholder(string, place) {
+export type Place = {
+    [holder: string]: string;
+};
+
+function placeholder(string: string, place: Place) {
     const placeholders = Object.keys(place).sort(
         (a, b) => b.length - a.length || b.localeCompare(a) // sort by length, if equal then // sort by dictionary order
     );
@@ -31,6 +35,5 @@ function placeholder(string, place) {
     return finalString;
 }
 
-module.exports = {
-    placeholder,
-};
+export default placeholder;
+export {placeholder};

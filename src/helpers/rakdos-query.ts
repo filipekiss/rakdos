@@ -2,11 +2,19 @@ const sets = require('static/sets.json');
 const api = require('helpers/scryfall');
 
 class RakdosQuery {
+    originalString: string = '';
+    isPrice: boolean = false;
+    isArt: boolean = false;
+    isLegality: boolean = false;
+    isToken: boolean = false;
+    text: string = '';
+    set: string | null = null;
+
     static get TOKEN() {
         return 'token';
     }
 
-    constructor(queryString) {
+    constructor(queryString: string) {
         this.originalString = queryString;
         this.isPrice = false;
         this.isArt = false;
@@ -18,65 +26,65 @@ class RakdosQuery {
         this.text = query;
     }
 
-    parseModifiers(string) {
+    parseModifiers(string: string): string {
         // Parse modifiers like $ for price and # for legality
         return string
             .split(' ')
-            .map((segment) => {
-                let currentSegment = segment;
-                if (currentSegment.slice(0, 1) === '$') {
-                    this.isPrice = true;
-                    currentSegment = currentSegment.slice(1);
+            .map(
+                (segment: string): string => {
+                    let currentSegment = segment;
+                    if (currentSegment.slice(0, 1) === '$') {
+                        this.isPrice = true;
+                        currentSegment = currentSegment.slice(1);
+                    }
+                    if (currentSegment.slice(0, 1) === '#') {
+                        this.isLegality = true;
+                        currentSegment = currentSegment.slice(1);
+                    }
+                    if (currentSegment.slice(0, 1) === '!') {
+                        this.isArt = true;
+                        currentSegment = currentSegment.slice(1);
+                    }
+                    return currentSegment;
                 }
-                if (currentSegment.slice(0, 1) === '#') {
-                    this.isLegality = true;
-                    currentSegment = currentSegment.slice(1);
-                }
-                if (currentSegment.slice(0, 1) === '!') {
-                    this.isArt = true;
-                    currentSegment = currentSegment.slice(1);
-                }
-                return currentSegment;
-            })
+            )
             .join(' ');
     }
 
-    parseSet(string) {
+    parseSet(string: string): string {
         return string
             .split('|')
-            .filter((segment) => {
-                const setCode = segment.toLowerCase().trim();
-                if (sets[setCode]) {
-                    this.set = setCode;
-                    return false;
+            .filter(
+                (segment: string): boolean => {
+                    const setCode = segment.toLowerCase().trim();
+                    if (sets[setCode]) {
+                        this.set = setCode;
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
-            })
+            )
             .join(' ');
     }
 
-    parseToken(string) {
-        const debug = (item) => console.log(item) || item;
+    parseToken(string: string): string {
         return string
             .split(' ')
-            .map(debug)
-            .filter((segment) => {
-                const isToken = segment.toLowerCase() === RakdosQuery.TOKEN;
-                console.log(segment.toLowerCase());
-                console.log(RakdosQuery.TOKEN);
-                console.log(isToken);
-                if (isToken) {
-                    this.isToken = isToken;
-                    if (this.set) {
-                        this.set = `t${this.set}`;
+            .filter(
+                (segment: string): boolean => {
+                    const isToken = segment.toLowerCase() === RakdosQuery.TOKEN;
+                    if (isToken) {
+                        this.isToken = isToken;
+                        if (this.set) {
+                            this.set = `t${this.set}`;
+                        }
+                        return false;
                     }
-                    return false;
+                    return true;
                 }
-                return true;
-            })
-            .map(debug)
+            )
             .join(' ');
     }
 }
 
-module.exports = RakdosQuery;
+export default RakdosQuery;

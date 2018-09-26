@@ -1,15 +1,16 @@
-const ScryfallApi = require('../helpers/scryfall');
-const RakdosCard = require('../models/rakdos/card');
-const RakdosQuery = require('../helpers/rakdos-query');
-const CardFacePhoto = require('../models/rakdos/card-face-photo');
-const Legality = require('../helpers/constants/legality');
-const Price = require('../helpers/constants/price');
+import ScryfallApi from '../helpers/scryfall';
+import RakdosCard from '../models/rakdos/card';
+import RakdosQuery from '../helpers/rakdos-query';
+import CardFacePhoto from '../models/rakdos/card-face-photo';
+import Legality from '../helpers/constants/legality';
+import Price from '../helpers/constants/price';
+import {CardFace} from 'interfaces/Card';
 
 const api = new ScryfallApi();
 
 const CARD_PATTERN = /\[\[((?:(?!\]\]).)+)\]\]/gm;
 
-const runRegex = function(str, regex) {
+const runRegex = function(str: string, regex: RegExp) {
     const cards = [];
     let m;
 
@@ -25,26 +26,26 @@ const runRegex = function(str, regex) {
     return cards;
 };
 
-const findCardsInString = function(str) {
+const findCardsInString = function(str: string) {
     const regex = /\[\[([^!\#$](?:(?!\]\]).)+)\]\]/gm;
     return runRegex(str, regex);
 };
 
-const findLegalities = function(str) {
+const findLegalities = function(str: string) {
     const regex = /\[\[#((?:(?!\]\]).)+)\]\]/gm;
     return runRegex(str, regex);
 };
-const findPrices = function(str) {
+const findPrices = function(str: string) {
     const regex = /\[\[\$((?:(?!\]\]).)+)\]\]/gm;
     return runRegex(str, regex);
 };
-const findArts = function(str) {
+const findArts = function(str: string) {
     const regex = /\[\[!((?:(?!\]\]).)+)\]\]/gm;
     return runRegex(str, regex);
 };
 
-async function buildMediaGroup(cards, imageSize) {
-    const mediaGroup = cards.map(async (card) => {
+async function buildMediaGroup(cards: string[], imageSize: string) {
+    const mediaGroup = cards.map(async (card: string) => {
         const rakdosQuery = new RakdosQuery(card);
         try {
             const scryfallCard = await api.named({
@@ -53,7 +54,8 @@ async function buildMediaGroup(cards, imageSize) {
             });
             const rakdosCard = new RakdosCard(scryfallCard);
             return rakdosCard.faces.map(
-                (currentFace) => new CardFacePhoto(currentFace, imageSize)
+                (currentFace: CardFace) =>
+                    new CardFacePhoto(currentFace, imageSize)
             );
         } catch (err) {
             const cardResult = new CardFacePhoto(rakdosQuery.text);
@@ -63,8 +65,8 @@ async function buildMediaGroup(cards, imageSize) {
     return Promise.all(mediaGroup);
 }
 
-async function buildLegalities(cards) {
-    const legalities = cards.map(async (card) => {
+async function buildLegalities(cards: string[]) {
+    const legalities = cards.map(async (card: string) => {
         const rakdosQuery = new RakdosQuery(card);
         try {
             const scryfallCard = await api.named({
@@ -84,8 +86,8 @@ async function buildLegalities(cards) {
     return Promise.all(legalities);
 }
 
-async function buildPrices(cards) {
-    const prices = cards.map(async (card) => {
+async function buildPrices(cards: string[]) {
+    const prices = cards.map(async (card: string) => {
         const rakdosQuery = new RakdosQuery(card);
         try {
             const scryfallCard = await api.named({
@@ -104,7 +106,7 @@ async function buildPrices(cards) {
     return Promise.all(prices);
 }
 
-const handler = async function(ctx) {
+const handler = async function(ctx: any) {
     const cards = findCardsInString(ctx.match.input);
     const legals = findLegalities(ctx.match.input);
     const prices = findPrices(ctx.match.input);
@@ -147,4 +149,4 @@ const messageHandler = {
     handler,
 };
 
-module.exports = {messageHandler};
+export {messageHandler};

@@ -1,6 +1,10 @@
+import Card from 'interfaces/Card/Card';
+
 const Price = {
-    buildPriceTags(card) {
+    buildPriceTags(card: Card) {
         return `💵 ${card.usd} | 💶 ${card.eur} | 🎟 ${card.tix}`;
     },
 };
-module.exports = Price;
+
+export default Price;
+export {Price};
