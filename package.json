@@ -30,7 +30,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "babel src -d ./build",
-        "dev": "nodemon src/index.js dotenv_config_path=.env.dev --exec \"node --require dotenv/config --require @babel/register\"",
+        "dev": "nodemon src/index.js dotenv_config_path=.env --exec \"node --require dotenv/config --require @babel/register\"",
         "start": "node build/index.js"
     },
     "babel": {

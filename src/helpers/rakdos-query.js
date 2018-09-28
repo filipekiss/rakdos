@@ -56,15 +56,10 @@ class RakdosQuery {
     }
 
     parseToken(string) {
-        const debug = (item) => console.log(item) || item;
         return string
             .split(' ')
-            .map(debug)
             .filter((segment) => {
                 const isToken = segment.toLowerCase() === RakdosQuery.TOKEN;
-                console.log(segment.toLowerCase());
-                console.log(RakdosQuery.TOKEN);
-                console.log(isToken);
                 if (isToken) {
                     this.isToken = isToken;
                     if (this.set) {
@@ -74,7 +69,6 @@ class RakdosQuery {
                 }
                 return true;
             })
-            .map(debug)
             .join(' ');
     }
 }

@@ -24,7 +24,7 @@ class RakdosCard {
         if (card.card_faces && card.image_uris) {
             const rakdosCard = this.buildSingleFace(card);
             rakdosCard.face = 'a';
-            rakdosCard.getImage = this.getImage.bind(this, 'a');
+            rakdosCard.getImage = this.getImage.bind(rakdosCard, 'a');
             return [rakdosCard];
         }
         if (card.card_faces && !card.image_uris) {
@@ -35,14 +35,15 @@ class RakdosCard {
 
     buildSingleFace(cardFace, idx = 0) {
         const cardFaceId = this.setCardFace(cardFace, idx);
-        return {
+        const face = {
             oracle: cardFace.oracle_text,
             mana_cost: this.buildManaCost(cardFace.mana_cost),
             name: cardFace.name,
             face: cardFaceId,
-            getImage: this.getImage.bind(this, cardFaceId),
             images: cardFace.image_uris,
         };
+        face.getImage = this.getImage.bind(face, cardFaceId);
+        return face;
     }
 
     setCardFace(card, idx = 0) {
@@ -58,13 +59,7 @@ class RakdosCard {
     }
 
     getImage(face = '', size = 'large') {
-        if (this.type === this.TOKEN && this.faces[0].images[size]) {
-            return this.images[size];
-        }
-        const cardImageUrl = `https://img.scryfall.com/cards/${size}/en/${
-            this.set
-        }/${this.number}${face}.jpg`;
-        return cardImageUrl;
+        return this.images[size];
     }
 }
 
