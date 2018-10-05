@@ -54,7 +54,6 @@
     },
     "lint-staged": {
         "*.ts": [
-            "tsc",
             "pretty-quick --staged"
         ],
         "*.{json,md}": [

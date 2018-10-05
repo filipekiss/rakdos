@@ -24,23 +24,29 @@ bot.on(
         answerInlineQuery(articles, {
             cache_time: CACHE_TIME,
         });
-    }
+    },
 );
 
 bot.start((ctx: any) =>
     ctx.replyWithHTML(`
 Welcome to Rakdos! I'm a bot dedicated to finding M:tG card info for you. For instructions on how to use me, please, see https://github.com/filipekiss/rakdos#rakdos
-`)
+`),
 );
 
 bot.help((ctx: any) =>
     ctx.replyWithHTML(`
 For instructions on how to use me, please, see https://github.com/filipekiss/rakdos#rakdos
-`)
+`),
 );
 
 bot.on('callback_query', handleCallbackQuery);
 
 bot.hears(messageHandler.trigger, messageHandler.handler);
+
+bot.command('sets', (ctx: any) => {
+    ctx.replyWithHTML(
+        'To see the set codes <a href="https://github.com/filipekiss/rakdos/wiki/Sets">click here</a>',
+    );
+});
 
 export default bot;
