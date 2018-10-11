@@ -1,4 +1,5 @@
 const sets = require('static/sets.json');
+const nicknames = require('static/nicknames.json');
 const api = require('helpers/scryfall');
 
 class RakdosQuery {
@@ -23,6 +24,7 @@ class RakdosQuery {
         let query = this.parseModifiers(queryString);
         query = this.parseSet(query);
         query = this.parseToken(query);
+        query = this.parseNicknames(query, nicknames);
         this.text = query;
     }
 
@@ -46,7 +48,7 @@ class RakdosQuery {
                         currentSegment = currentSegment.slice(1);
                     }
                     return currentSegment;
-                }
+                },
             )
             .join(' ');
     }
@@ -62,7 +64,7 @@ class RakdosQuery {
                         return false;
                     }
                     return true;
-                }
+                },
             )
             .join(' ');
     }
@@ -81,9 +83,17 @@ class RakdosQuery {
                         return false;
                     }
                     return true;
-                }
+                },
             )
             .join(' ');
+    }
+
+    parseNicknames(string: string, nicknames: any): string {
+        const nickname = string.toLowerCase();
+        if (nicknames[nickname]) {
+            return nicknames[nickname];
+        }
+        return string;
     }
 }
 
