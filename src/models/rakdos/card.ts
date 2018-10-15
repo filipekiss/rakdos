@@ -56,7 +56,7 @@ class Card {
 
     buildSingleFace(
         cardFace: ScryfallCard | ScryfallCardFace,
-        idx: number = 0
+        idx: number = 0,
     ): CardFace {
         const cardFaceId = this.setCardFace(cardFace, idx);
         return {
@@ -77,19 +77,31 @@ class Card {
         return '';
     }
 
+    getFaceIndex(faceLabel: 'a' | 'b' = 'a') {
+        const faces: {
+            a: number;
+            b: number;
+        } = {
+            a: 0,
+            b: 1,
+        };
+        return faces[faceLabel] ? faces[faceLabel] : 0;
+    }
+
     buildManaCost(manaCost: string): string {
         return manaCost ? `(${manaCost.replace(/[{}]/g, '')})` : '';
     }
 
-    getImage(face: string = '', size = 'large') {
+    getImage(face: 'a' | 'b' = 'a', size = 'large') {
         const firstFace = this.faces[0];
         if (this.type === this.TOKEN && firstFace.images[size]) {
             return this.images[size];
         }
-        const cardImageUrl = `https://img.scryfall.com/cards/${size}/en/${
-            this.set
-        }/${this.number}${face}.jpg`;
-        return cardImageUrl;
+        const faceIndex = this.getFaceIndex(face);
+        const cardFace = this.faces[faceIndex];
+        const cardImageUrl = new URL(cardFace.images[size]);
+        cardImageUrl.search = ''; // Ensure no query string params are passed
+        return cardImageUrl.href;
     }
 }
 
