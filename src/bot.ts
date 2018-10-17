@@ -1,7 +1,11 @@
 import Telegraf from 'telegraf';
+import Stage from 'telegraf/stage';
+import session from 'telegraf/session';
 import {inlineQueryHandler} from './handlers/inline-query';
 import {messageHandler} from './handlers/incoming-message';
 import {handleCallbackQuery} from './handlers/callback-query';
+import expandStage from './scenes/expand';
+const {enter} = Stage;
 
 /*
  * We make this const assignment before the call to `new` because TypeScript
@@ -48,5 +52,10 @@ bot.command('sets', (ctx: any) => {
         'To see the set codes <a href="https://github.com/filipekiss/rakdos/wiki/Sets">click here</a>',
     );
 });
+
+// STage test
+bot.use(session());
+bot.use(expandStage.middleware());
+bot.command('expand', enter('expand'));
 
 export default bot;
