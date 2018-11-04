@@ -2,11 +2,6 @@
 
 ![Latest Release](https://img.shields.io/github/release/filipekiss/rakdos.svg)
 
-### Disclaimer:
-
-Rakdos is being rewritten in [TypeScript]. All the pull-requests must be open
-against the [`next` branch] and not `master`.
-
 ---
 
 Rakdos is a Telegram bot to search Scryfall for Magic: The Gathering cards.
@@ -147,5 +142,5 @@ and maintained by Filipe Kiss.
 > Twitter [@filipekiss](https://twitter.com/filipekiss)
 
 [mit]: http://mit-license.org/
-[TypeScript]: https://typescriptlang.org
+[typescript]: https://typescriptlang.org
 [`next` branch]: https://github.com/filipekiss/rakdos/tree/next
