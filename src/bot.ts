@@ -46,9 +46,8 @@ For instructions on how to use me, please, see https://github.com/filipekiss/rak
 
 bot.on('callback_query', handleCallbackQuery);
 
-bot.on('message', handlePrivateMessage);
-
 bot.hears(messageHandler.trigger, messageHandler.handler);
+bot.on('message', handlePrivateMessage);
 
 bot.command('sets', (ctx: any) => {
     ctx.replyWithHTML(
