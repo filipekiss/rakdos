@@ -4,6 +4,7 @@ import session from 'telegraf/session';
 import {inlineQueryHandler} from './handlers/inline-query';
 import {messageHandler} from './handlers/incoming-message';
 import {handleCallbackQuery} from './handlers/callback-query';
+import handlePrivateMessage from './handlers/private-message';
 import expandStage from './scenes/expand';
 const {enter} = Stage;
 
@@ -44,6 +45,8 @@ For instructions on how to use me, please, see https://github.com/filipekiss/rak
 );
 
 bot.on('callback_query', handleCallbackQuery);
+
+bot.on('message', handlePrivateMessage);
 
 bot.hears(messageHandler.trigger, messageHandler.handler);
 
