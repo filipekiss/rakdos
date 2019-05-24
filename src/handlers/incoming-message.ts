@@ -8,7 +8,7 @@ import {CardFace} from 'interfaces';
 
 const api = new ScryfallApi();
 
-const CARD_PATTERN = /\[\[((?:(?!\]\]).)+)\]\]/gm;
+const CARD_PATTERN = /(?:\[\[((?:(?!\]\]).)+)\]\]|https:\/\/scryfall\.com\/card\/(.+)\/(.+)\/(.+))/gm;
 
 const runRegex = function(str: string, regex: RegExp) {
     const cards = [];
@@ -20,7 +20,12 @@ const runRegex = function(str: string, regex: RegExp) {
             regex.lastIndex++;
         }
 
-        cards.push(m[1]);
+        if (Boolean(m[1]) && !Boolean(m[2])) {
+            cards.push(m[1]);
+        } else {
+            const [_, set, number, cardname] = m;
+            cards.push({set, number, cardname});
+        }
     }
 
     return cards;
@@ -44,6 +49,31 @@ const findArts = function(str: string) {
     return runRegex(str, regex);
 };
 
+const findScryfallUrl = function(str: string) {
+    const regex = /https:\/\/scryfall\.com\/card\/(.+)\/(.+)\/(.+)/gm;
+    return runRegex(str, regex);
+};
+
+async function buildUrlResults(
+    urls: {set: string; number: string; cardname: string}[],
+    imageSize: string,
+) {
+    const mediaGroup = urls.map(async (url) => {
+        try {
+            const scryfallCard = await api.setAndId(url);
+            const rakdosCard = new RakdosCard(scryfallCard);
+            return rakdosCard.faces.map(
+                (currentFace: CardFace) =>
+                    new CardFacePhoto(currentFace, imageSize),
+            );
+        } catch (err) {
+            const cardResult = new CardFacePhoto(url.cardname);
+            return cardResult;
+        }
+    });
+    return Promise.all(mediaGroup);
+}
+
 async function buildMediaGroup(cards: string[], imageSize: string) {
     const mediaGroup = cards.map(async (card: string) => {
         const rakdosQuery = new RakdosQuery(card);
@@ -55,7 +85,7 @@ async function buildMediaGroup(cards: string[], imageSize: string) {
             const rakdosCard = new RakdosCard(scryfallCard);
             return rakdosCard.faces.map(
                 (currentFace: CardFace) =>
-                    new CardFacePhoto(currentFace, imageSize)
+                    new CardFacePhoto(currentFace, imageSize),
             );
         } catch (err) {
             const cardResult = new CardFacePhoto(rakdosQuery.text);
@@ -76,7 +106,7 @@ async function buildLegalities(cards: string[]) {
             return [
                 `<b>${rakdosCard.name}</b>\n${Legality.buildLegalityText(
                     rakdosCard,
-                    '\n'
+                    '\n',
                 )}`,
             ];
         } catch (err) {
@@ -96,7 +126,7 @@ async function buildPrices(cards: string[]) {
             const rakdosCard = new RakdosCard(scryfallCard);
             return [
                 `<b>${rakdosCard.name}</b>\n${Price.buildPriceTags(
-                    rakdosCard
+                    rakdosCard,
                 )}`,
             ];
         } catch (err) {
@@ -111,7 +141,8 @@ const handler = async function(ctx: any) {
     const legals = findLegalities(ctx.match.input);
     const prices = findPrices(ctx.match.input);
     const arts = findArts(ctx.match.input);
-    if (cards) {
+    const urls = findScryfallUrl(ctx.match.input);
+    if (Boolean(cards)) {
         let mediaGroup = await buildMediaGroup(cards, 'large');
         mediaGroup = [].concat.apply([], mediaGroup);
         if (mediaGroup) {
@@ -119,7 +150,7 @@ const handler = async function(ctx: any) {
         }
     }
 
-    if (arts) {
+    if (Boolean(arts)) {
         let mediaGroup = await buildMediaGroup(arts, 'art_crop');
         mediaGroup = [].concat.apply([], mediaGroup);
         if (mediaGroup) {
@@ -127,7 +158,7 @@ const handler = async function(ctx: any) {
         }
     }
 
-    if (legals) {
+    if (Boolean(legals)) {
         let resultText = await buildLegalities(legals);
         resultText = [].concat.apply([], resultText);
         if (resultText) {
@@ -135,11 +166,19 @@ const handler = async function(ctx: any) {
         }
     }
 
-    if (prices) {
+    if (Boolean(prices)) {
         let resultText = await buildPrices(prices);
         resultText = [].concat.apply([], resultText);
         if (resultText) {
             ctx.replyWithHTML(resultText.join('\n'));
+        }
+    }
+
+    if (Boolean(urls)) {
+        let mediaGroup = await buildUrlResults(urls, 'large');
+        mediaGroup = [].concat.apply([], mediaGroup);
+        if (mediaGroup) {
+            ctx.replyWithMediaGroup(mediaGroup);
         }
     }
 };

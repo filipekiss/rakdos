@@ -25,6 +25,7 @@ class ScryfallApi {
             mtgo: '/cards/mtgo/:id',
             arena: '/cards/arena/:id',
             single: '/cards/:id',
+            set: '/cards/:set/:number',
         },
         sets: {
             root: '/sets',
@@ -57,7 +58,7 @@ class ScryfallApi {
         }
         const requestUrl = this.buildRequestUrl(
             this.scryfallApi.cards.search,
-            searchParams
+            searchParams,
         );
         const results = await this.parsedSearchResults(requestUrl);
         if (results.data && results.data.length > 50) {
@@ -72,8 +73,21 @@ class ScryfallApi {
         }
         const requestUrl = this.buildRequestUrl(
             this.scryfallApi.cards.named,
-            params
+            params,
         );
+        const results = await this.parsedSearchResults(requestUrl);
+        return results;
+    }
+
+    async setAndId(params: {set?: string; number?: string} = {}) {
+        if (!params || !params.set || !params.number) {
+            throw new Error('Set code and Card number required');
+        }
+        const {set, number} = params;
+        const requestUrl = this.buildRequestUrl(this.scryfallApi.cards.set, {
+            set,
+            number,
+        });
         const results = await this.parsedSearchResults(requestUrl);
         return results;
     }
@@ -82,7 +96,7 @@ class ScryfallApi {
         if (id) {
             const requestUrl = this.buildRequestUrl(
                 this.scryfallApi.cards.single,
-                {id}
+                {id},
             );
             const result = await this.parsedSearchResults(requestUrl);
             return result;
