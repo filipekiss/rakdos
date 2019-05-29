@@ -30,7 +30,7 @@
         "eslint-import-resolver-babel-module": "4.0.0",
         "eslint-plugin-import": "2.14.0",
         "husky": "1.0.0",
-        "lint-staged": "7.3.0",
+        "lint-staged": "8.1.7",
         "nodemon": "1.18.9",
         "prettier": "1.14.3",
         "pretty-quick": "1.11.0",
