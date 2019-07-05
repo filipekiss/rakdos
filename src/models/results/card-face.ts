@@ -43,7 +43,7 @@ class CardFaceResult {
         const viewInScryfallButton = Markup.urlButton(
             'View In Scryfall',
             card.scryfall_uri,
-            !card.scryfall_uri
+            !card.scryfall_uri,
         );
         const tranformButton = buildTransformButton(card, cardFace);
         this.reply_markup = Markup.inlineKeyboard([

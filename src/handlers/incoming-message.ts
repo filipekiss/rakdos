@@ -142,7 +142,7 @@ const handler = async function(ctx: any) {
     const prices = findPrices(ctx.match.input);
     const arts = findArts(ctx.match.input);
     const urls = findScryfallUrl(ctx.match.input);
-    if (Boolean(cards)) {
+    if (cards.length > 0) {
         let mediaGroup = await buildMediaGroup(cards, 'large');
         mediaGroup = [].concat.apply([], mediaGroup);
         if (mediaGroup) {
@@ -150,7 +150,7 @@ const handler = async function(ctx: any) {
         }
     }
 
-    if (Boolean(arts)) {
+    if (arts.length > 0) {
         let mediaGroup = await buildMediaGroup(arts, 'art_crop');
         mediaGroup = [].concat.apply([], mediaGroup);
         if (mediaGroup) {
@@ -158,7 +158,7 @@ const handler = async function(ctx: any) {
         }
     }
 
-    if (Boolean(legals)) {
+    if (legals.length > 0) {
         let resultText = await buildLegalities(legals);
         resultText = [].concat.apply([], resultText);
         if (resultText) {
@@ -166,7 +166,7 @@ const handler = async function(ctx: any) {
         }
     }
 
-    if (Boolean(prices)) {
+    if (prices.length > 0) {
         let resultText = await buildPrices(prices);
         resultText = [].concat.apply([], resultText);
         if (resultText) {
@@ -174,7 +174,7 @@ const handler = async function(ctx: any) {
         }
     }
 
-    if (Boolean(urls)) {
+    if (urls.length > 0) {
         let mediaGroup = await buildUrlResults(urls, 'large');
         mediaGroup = [].concat.apply([], mediaGroup);
         if (mediaGroup) {

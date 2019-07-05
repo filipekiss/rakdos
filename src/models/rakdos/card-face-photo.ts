@@ -7,6 +7,13 @@ class CardFacePhoto {
 
     constructor(cardFace: CardFace | any, size = 'large') {
         const isCardObject = cardFace.constructor === Object;
+        if (isCardObject && cardFace.name === 'Llanowar Tribe') {
+            const tribeFactor = Math.floor(Math.random() * 100) > 95;
+            if (tribeFactor) {
+                this.buildLlanotribe(cardFace, size);
+                return this;
+            }
+        }
         if (isCardObject) {
             this.buildPhoto(cardFace, size);
             return this;
@@ -18,6 +25,11 @@ class CardFacePhoto {
     buildPhoto(cardFace: CardFace, size: string): void {
         this.media = cardFace.getImage(size);
         this.caption = `${cardFace.name}`;
+    }
+
+    buildLlanotribe(cardFace: CardFace, size: string): void {
+        this.media = 'https://i.imgur.com/GjWXl9S.png';
+        this.caption = '3 Fucking Llanowar Elves';
     }
 
     build404(card: ScryfallCard): void {
