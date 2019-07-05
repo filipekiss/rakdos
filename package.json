@@ -36,7 +36,7 @@
         "pretty-quick": "1.11.0",
         "telegram-typings": "4.0.0-beta",
         "ts-node": "7.0.1",
-        "typescript": "3.0.3"
+        "typescript": "3.5.2"
     },
     "resolutions": {
         "event-stream": "4.0.1"
