@@ -2,21 +2,22 @@
 # yarn lockfile v1
 
 
-"@babel/cli@7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.1.0.tgz#a9429fd63911711b0fa93ae50d73beee6c42aef8"
+"@babel/cli@7.5.0":
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.5.0.tgz#f403c930692e28ecfa3bf02a9e7562b474f38271"
+  integrity sha512-qNH55fWbKrEsCwID+Qc/3JDPnsSGpIIiMDbppnR8Z6PxLAqMQCFNqBctkIkBrMH49Nx+qqVTrHRWUR+ho2k+qQ==
   dependencies:
     commander "^2.8.1"
     convert-source-map "^1.1.0"
     fs-readdir-recursive "^1.1.0"
     glob "^7.0.0"
-    lodash "^4.17.10"
+    lodash "^4.17.11"
     mkdirp "^0.5.1"
     output-file-sync "^2.0.0"
     slash "^2.0.0"
     source-map "^0.5.0"
   optionalDependencies:
-    chokidar "^2.0.3"
+    chokidar "^2.0.4"
 
 "@babel/code-frame@^7.0.0":
   version "7.0.0"
@@ -1071,7 +1072,7 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
 
-chokidar@^2.0.3, chokidar@^2.0.4:
+chokidar@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.4.tgz#356ff4e2b0e8e43e322d18a372460bbcf3accd26"
   dependencies:
@@ -2694,7 +2695,7 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
 
-lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4:
+lodash@^4.17.10, lodash@^4.17.11:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
