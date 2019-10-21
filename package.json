@@ -8,7 +8,7 @@
         "express": "^4.17.1",
         "node-fetch": "^2.3.0",
         "query-string": "^6.8.1",
-        "telegraf": "^3.26.0"
+        "telegraf": "^3.33.0"
     },
     "devDependencies": {
         "@babel/cli": "7.1.0",
