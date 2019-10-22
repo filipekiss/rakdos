@@ -107,7 +107,8 @@ async function buildLegalities(cards: string[]) {
                 `<b>${rakdosCard.name}</b>\n${Legality.buildLegalityText(
                     rakdosCard,
                     '\n',
-                )}`,
+                )}\n
+                \n<b>Legend</b>\n✅ <b>Legal</b> ⭕️ <b>Not Legal</b> ❌ <b>Restricted</b> 🚫 <b>Banned</b>`,
             ];
         } catch (err) {
             return [`${rakdosQuery.text} not found.`];

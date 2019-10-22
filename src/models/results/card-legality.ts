@@ -3,8 +3,12 @@ import Legality from 'helpers/constants/legality';
 
 function buildMessageContent(card: Card) {
     return {
-        message_text: `<strong>${card.name}</strong>
-${Legality.buildLegalityText(card, '\n')}`,
+        message_text: `<strong>${
+            card.name
+        }</strong>\n${Legality.buildLegalityText(
+            card,
+            '\n',
+        )}\n<b>Legend</b>\n✅ <b>Legal</b> ⭕️ <b>Not Legal</b> ❌ <b>Restricted</b> 🚫 <b>Banned</b>`,
         parse_mode: 'HTML',
     };
 }

@@ -16,23 +16,25 @@ const Legality = {
     LEGAL: 'legal',
     NOT_LEGAL: 'not_legal',
     BANNED: 'banned',
+    RESTRICTED: 'restricted',
     label: (legality: string): string => {
         const labels = {
             [Legality.STANDARD]: 'Standard',
-            // [Legality.FUTURE]: 'Future',
-            // [Legality.FRONTIER]: 'Frontier',
+            [Legality.FUTURE]: 'Future',
+            [Legality.FRONTIER]: 'Frontier',
             [Legality.MODERN]: 'Modern',
             [Legality.LEGACY]: 'Legacy',
-            // [Legality.PAUPER]: 'Pauper',
-            // [Legality.VINTAGE]: 'Vintage',
-            // [Legality.PENNY]: 'Penny',
-            // [Legality.COMMANDER]: 'Commander',
-            // [Legality.VERSUS]: 'Versus',
-            // [Legality.DUEL]: 'Duel Commander',
-            // [Legality.BRAWL]: 'Brawl',
+            [Legality.PAUPER]: 'Pauper',
+            [Legality.VINTAGE]: 'Vintage',
+            [Legality.PENNY]: 'Penny',
+            [Legality.COMMANDER]: 'Commander',
+            [Legality.VERSUS]: 'Versus',
+            [Legality.DUEL]: 'Duel Commander',
+            [Legality.BRAWL]: 'Brawl',
             [Legality.LEGAL]: '✅',
             [Legality.NOT_LEGAL]: '⭕️',
-            [Legality.BANNED]: '❌',
+            [Legality.BANNED]: '🚫',
+            [Legality.RESTRICTED]: '❌',
         };
 
         return labels[legality] ? labels[legality] : '';
@@ -43,7 +45,7 @@ const Legality = {
                 (legality: [string, string]): boolean => {
                     const [name] = legality;
                     return Boolean(Legality.label(name));
-                }
+                },
             )
             .map((legality: string[]) => {
                 const [name, legal] = legality;
