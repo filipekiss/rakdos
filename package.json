@@ -35,7 +35,7 @@
         "prettier": "1.14.3",
         "pretty-quick": "1.11.0",
         "telegram-typings": "4.0.0-beta",
-        "ts-node": "7.0.1",
+        "ts-node": "8.6.2",
         "typescript": "3.5.2"
     },
     "resolutions": {
