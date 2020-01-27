@@ -674,14 +674,15 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@12.0.12":
+"@types/node@*", "@types/node@^13.1.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.5.0.tgz#4e498dbf355795a611a87ae5ef811a8660d42662"
+  integrity sha512-Onhn+z72D2O2Pb2ql2xukJ55rglumsVo1H6Fmyi8mlU9SvKdBk/pUSUAiBY/d9bAOF7VVWajX3sths/+g6ZiAQ==
+
+"@types/node@12.0.12":
   version "12.0.12"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.12.tgz#cc791b402360db1eaf7176479072f91ee6c6c7ca"
   integrity sha512-Uy0PN4R5vgBUXFoJrKryf5aTk3kJ8Rv3PdlHjl6UaX+Cqp1QE0yPQ68MPXGrZOfG7gZVNDIJZYyot0B9ubXUrQ==
-
-"@types/node@^10.1.2":
-  version "10.11.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.0.tgz#ddd0d67a3b6c3810dd1a59e36675fa82de5e19ae"
 
 "@types/range-parser@*":
   version "1.2.2"
@@ -2884,6 +2885,11 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
+module-alias@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/module-alias/-/module-alias-2.2.2.tgz#151cdcecc24e25739ff0aa6e51e1c5716974c0e0"
+  integrity sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q==
+
 mri@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/mri/-/mri-1.1.1.tgz#85aa26d3daeeeedf80dc5984af95cc5ca5cad9f1"
@@ -2964,11 +2970,7 @@ node-environment-flags@^1.0.5:
     object.getownpropertydescriptors "^2.0.3"
     semver "^5.7.0"
 
-node-fetch@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.2.0.tgz#4ee79bde909262f9775f731e3656d0db55ced5b5"
-
-node-fetch@^2.3.0:
+node-fetch@^2.2.0, node-fetch@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
   integrity sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
@@ -4102,13 +4104,15 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-telegraf@^3.26.0:
-  version "3.26.0"
-  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-3.26.0.tgz#6102280c7971431a8a8a96fe0502285cc1a223c9"
-  integrity sha512-mADDeKoSBbfcOntV0/78vyNNO59/eNQiY8V3xUfrxCOwZsDxtV0dkU53Zu7k7xPPddViLUzl3EENil97CDgbpw==
+telegraf@^3.36.0:
+  version "3.36.0"
+  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-3.36.0.tgz#eab1160159df6033d3cb92ac990902523277822a"
+  integrity sha512-9o6AJKRiTm5vMWYI6WpTfBHzu4FMpWBNKxvnMxRds/cbMY9RnsVVjdi8i4bFFlfd+xbi73EbrnI3dybayryICA==
   dependencies:
-    "@types/node" "^10.1.2"
+    "@types/node" "^13.1.0"
     debug "^4.0.1"
+    minimist "^1.2.0"
+    module-alias "^2.2.2"
     node-fetch "^2.2.0"
     sandwich-stream "^2.0.1"
     telegram-typings "^3.6.0"
