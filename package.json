@@ -33,7 +33,7 @@
         "lint-staged": "8.2.0",
         "nodemon": "1.18.9",
         "prettier": "1.14.3",
-        "pretty-quick": "1.11.0",
+        "pretty-quick": "2.0.2",
         "telegram-typings": "4.0.0-beta",
         "ts-node": "7.0.1",
         "typescript": "3.5.2"
