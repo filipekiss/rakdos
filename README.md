@@ -133,7 +133,7 @@ look into it as soon as possible.
 If you like the bot and would like to support my work, you can tip me via
 Paypal! Just click the button below:
 
-[![Donate Via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UXALPPNXG2MB4)
+[![Donate Via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/filipekiss)
 
 **rakdos** © 2018+, Filipe Kiss Released under the [MIT] License.<br> Authored
 and maintained by Filipe Kiss.
