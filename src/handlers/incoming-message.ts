@@ -11,8 +11,8 @@ const api = new ScryfallApi();
 const CARD_PATTERN = /(?:\[\[((?:(?!\]\]).)+)\]\]|https:\/\/scryfall\.com\/card\/(.+)\/(.+)\/(.+))/gm;
 
 const runRegex = function(str: string, regex: RegExp) {
-    const cards = [];
-    let m;
+    const cards: any[] = [];
+    let m: RegExpExecArray | null;
 
     while ((m = regex.exec(str)) !== null) {
         // This is necessary to avoid infinite loops with zero-width matches
@@ -23,7 +23,7 @@ const runRegex = function(str: string, regex: RegExp) {
         if (Boolean(m[1]) && !Boolean(m[2])) {
             cards.push(m[1]);
         } else {
-            const [_, set, number, cardname] = m;
+            const [, set, number, cardname] = m;
             cards.push({set, number, cardname});
         }
     }
@@ -68,7 +68,7 @@ async function buildUrlResults(
             );
         } catch (err) {
             const cardResult = new CardFacePhoto(url.cardname);
-            return cardResult;
+            return [cardResult];
         }
     });
     return Promise.all(mediaGroup);
@@ -144,40 +144,35 @@ const handler = async function(ctx: any) {
     const arts = findArts(ctx.match.input);
     const urls = findScryfallUrl(ctx.match.input);
     if (cards.length > 0) {
-        let mediaGroup = await buildMediaGroup(cards, 'large');
-        mediaGroup = [].concat.apply([], mediaGroup);
+        const mediaGroup = await buildMediaGroup(cards, 'large');
         if (mediaGroup) {
             ctx.replyWithMediaGroup(mediaGroup);
         }
     }
 
     if (arts.length > 0) {
-        let mediaGroup = await buildMediaGroup(arts, 'art_crop');
-        mediaGroup = [].concat.apply([], mediaGroup);
+        const mediaGroup = await buildMediaGroup(arts, 'art_crop');
         if (mediaGroup) {
             ctx.replyWithMediaGroup(mediaGroup);
         }
     }
 
     if (legals.length > 0) {
-        let resultText = await buildLegalities(legals);
-        resultText = [].concat.apply([], resultText);
+        const resultText = await buildLegalities(legals);
         if (resultText) {
             ctx.replyWithHTML(resultText.join('\n'));
         }
     }
 
     if (prices.length > 0) {
-        let resultText = await buildPrices(prices);
-        resultText = [].concat.apply([], resultText);
+        const resultText = await buildPrices(prices);
         if (resultText) {
             ctx.replyWithHTML(resultText.join('\n'));
         }
     }
 
     if (urls.length > 0) {
-        let mediaGroup = await buildUrlResults(urls, 'large');
-        mediaGroup = [].concat.apply([], mediaGroup);
+        const mediaGroup = await buildUrlResults(urls, 'large');
         if (mediaGroup) {
             ctx.replyWithMediaGroup(mediaGroup);
         }

@@ -6,13 +6,7 @@ import CardPriceResult from 'models/results/card-price';
 import CardLegalityResult from 'models/results/card-legality';
 import CardArtResult from 'models/results/card-art';
 import RakdosQuery from 'helpers/rakdos-query';
-import {
-    Card,
-    CardFace,
-    ArticleResult,
-    ScryfallCard,
-    ScryfallResult,
-} from 'interfaces';
+import {ArticleResult, ScryfallCard, ScryfallResult} from 'interfaces';
 
 const api = new ScryfallApi();
 
@@ -31,17 +25,29 @@ async function search(rakdosQuery: RakdosQuery) {
             const rakdosCard = new RakdosCard(card);
             const cardResult = rakdosCard.faces.map((cardFace) => {
                 if (rakdosQuery.isPrice) {
-                    return new CardPriceResult(rakdosCard, cardFace);
+                    return new CardPriceResult(
+                        rakdosCard,
+                        cardFace,
+                    ) as ArticleResult;
                 }
                 if (rakdosQuery.isLegality) {
-                    return new CardLegalityResult(rakdosCard, cardFace);
+                    return new CardLegalityResult(
+                        rakdosCard,
+                        cardFace,
+                    ) as ArticleResult;
                 }
                 if (rakdosQuery.isArt) {
-                    return new CardArtResult(rakdosCard, cardFace);
+                    return new CardArtResult(
+                        rakdosCard,
+                        cardFace,
+                    ) as ArticleResult;
                 }
-                return new CardFaceResult(rakdosCard, cardFace);
+                return new CardFaceResult(
+                    rakdosCard,
+                    cardFace,
+                ) as ArticleResult;
             });
-            articles = [].concat.apply(articles, cardResult);
+            articles.concat(cardResult);
         });
     }
     return articles;

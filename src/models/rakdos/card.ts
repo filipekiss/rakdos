@@ -1,27 +1,15 @@
 import {ScryfallCard, ScryfallCardFace, CardFace} from 'interfaces';
 import {ScryfallCardPrices} from 'interfaces/Scryfall/ScryfallCard';
 
-function getPriceFromCard(priceKey: keyof ScryfallCardPrices) {
-    return (card: ScryfallCard) => {
+function getPriceFromCard(card: ScryfallCard) {
+    return (priceKey: keyof ScryfallCardPrices) => {
         return card.prices[priceKey] ? card.prices[priceKey] : 'N/A';
     };
 }
 
-function getUsdPrice(card: ScryfallCard) {
-    if (card.prices.usd_foil) {
-        return getPriceFromCard('usd_foil')(card);
-    }
-    return getPriceFromCard('usd')(card);
-}
-
-const getEurPrice = getPriceFromCard('eur');
-const getTixPrice = getPriceFromCard('tix');
-
 class Card {
     name: string;
-    usd?: string;
-    eur?: string;
-    tix?: string;
+    prices: ScryfallCardPrices;
     faces: CardFace[];
     set?: string;
     number?: number;
@@ -44,6 +32,7 @@ class Card {
         if (!card.set || !card.collector_number) {
             throw Error('Invalid Card Format');
         }
+        const getPriceIn = getPriceFromCard(card);
         this.name = card.name;
         this.scryfall_id = card.id;
         this.set = card.set;
@@ -51,9 +40,12 @@ class Card {
         this.number = card.collector_number;
         this.faces = this.buildFaces(card);
         this.legality = card.legalities;
-        this.usd = getUsdPrice(card);
-        this.tix = getTixPrice(card);
-        this.eur = getEurPrice(card);
+        this.prices = {
+            usd: getPriceIn('usd'),
+            usd_foil: getPriceIn('usd_foil'),
+            tix: getPriceIn('tix'),
+            eur: getPriceIn('eur'),
+        };
         this.type = card.layout;
         this.images = {};
     }
@@ -86,15 +78,15 @@ class Card {
         };
     }
 
-    setCardFace(card: ScryfallCard, idx = 0): string {
+    setCardFace(card: ScryfallCard, idx = 0): '' | 'a' | 'b' {
         if (card.object === 'card_face') {
-            const faces = ['a', 'b'];
+            const faces: ['a', 'b'] = ['a', 'b'];
             return faces[idx];
         }
         return '';
     }
 
-    getFaceIndex(faceLabel: 'a' | 'b' = 'a') {
+    getFaceIndex(faceLabel: '' | 'a' | 'b' = 'a') {
         const faces: {
             a: number;
             b: number;
@@ -109,7 +101,7 @@ class Card {
         return manaCost ? `(${manaCost.replace(/[{}]/g, '')})` : '';
     }
 
-    getImage(face: 'a' | 'b' = 'a', size = 'large') {
+    getImage(face: '' | 'a' | 'b' = 'a', size = 'large') {
         const firstFace = this.faces[0];
         if (this.type === this.TOKEN && firstFace.images[size]) {
             return this.images[size];

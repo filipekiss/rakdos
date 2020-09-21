@@ -2,7 +2,9 @@ import {Card} from 'interfaces';
 
 const Price = {
     buildPriceTags(card: Card) {
-        return `💵 ${card.usd} | 💶 ${card.eur} | 🎟 ${card.tix}`;
+        return `💵 ${card.prices.usd} | ✨ ${card.prices.usd_foil} | 💶 ${
+            card.prices.eur
+        } | 🎟 ${card.prices.tix}`;
     },
 };
 
