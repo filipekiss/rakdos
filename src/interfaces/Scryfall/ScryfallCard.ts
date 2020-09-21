@@ -1,14 +1,19 @@
 import ScryfallCardFace from './ScryfallCardFace';
 
+export interface ScryfallCardPrices {
+    usd: string;
+    usd_foil: string;
+    eur: string;
+    tix: string;
+}
+
 export default interface ScryfallCard {
     id: string;
     collector_number: number;
     name: string;
     scryfall_uri: string;
     set: string;
-    usd: string;
-    eur: string;
-    tix: string;
+    prices: ScryfallCardPrices;
     card_faces?: ScryfallCardFace[];
     image_uris: {
         [size: string]: string;

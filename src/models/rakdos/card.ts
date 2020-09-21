@@ -1,4 +1,21 @@
 import {ScryfallCard, ScryfallCardFace, CardFace} from 'interfaces';
+import {ScryfallCardPrices} from 'interfaces/Scryfall/ScryfallCard';
+
+function getPriceFromCard(priceKey: keyof ScryfallCardPrices) {
+    return (card: ScryfallCard) => {
+        return card.prices[priceKey] ? card.prices[priceKey] : 'N/A';
+    };
+}
+
+function getUsdPrice(card: ScryfallCard) {
+    if (card.prices.usd_foil) {
+        return getPriceFromCard('usd_foil')(card);
+    }
+    return getPriceFromCard('usd')(card);
+}
+
+const getEurPrice = getPriceFromCard('eur');
+const getTixPrice = getPriceFromCard('tix');
 
 class Card {
     name: string;
@@ -34,9 +51,9 @@ class Card {
         this.number = card.collector_number;
         this.faces = this.buildFaces(card);
         this.legality = card.legalities;
-        this.usd = card.usd ? card.usd : 'N/A';
-        this.tix = card.tix ? card.tix : 'N/A';
-        this.eur = card.eur ? card.eur : 'N/A';
+        this.usd = getUsdPrice(card);
+        this.tix = getTixPrice(card);
+        this.eur = getEurPrice(card);
         this.type = card.layout;
         this.images = {};
     }
