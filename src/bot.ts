@@ -6,6 +6,7 @@ import {messageHandler} from './handlers/incoming-message';
 import {handleCallbackQuery} from './handlers/callback-query';
 import handlePrivateMessage from './handlers/private-message';
 import expandStage from './scenes/expand';
+import {RAKDOS_TOKEN, getEnvironmentVar} from './env';
 const {enter} = Stage;
 
 /*
@@ -13,8 +14,8 @@ const {enter} = Stage;
  * will complain Telegraf has no constructor signature
  */
 const telegrafBot: any = Telegraf;
-const bot = new telegrafBot(process.env.BOT_TOKEN, {username: 'RakdosBot'});
-const CACHE_TIME = process.env.CACHE_TIME ? process.env.CACHE_TIME : 600;
+const bot = new telegrafBot(RAKDOS_TOKEN, {username: 'RakdosBot'});
+const CACHE_TIME = Number(getEnvironmentVar('RAKDOS_CACHE_TIME', 600));
 
 bot.on(
     'inline_query',
